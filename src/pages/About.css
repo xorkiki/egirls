@@ -8,13 +8,56 @@
   background-color: #000;
   color: #fff;
   font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
-  overflow: hidden;
-  z-index: 1000;
-  position: relative;
-  width: 100vw;
-  height: 100vh;
   overflow-y: auto; /* Allow vertical scrolling if content is too long */
-  background-color: #000;
+  z-index: 1000;
+}
+
+/* Terminal Button Styles */
+.terminal-buttons {
+  display: flex;
+  gap: 9px;
+}
+
+.terminal-button {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.terminal-button.close {
+  background-color: #ff5f56;
+}
+
+.terminal-button.close:hover {
+  background-color: #ff4444;
+}
+
+.terminal-button.close:hover .close-icon {
+  opacity: 1;
+}
+
+.close-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #000;
+  font-size: 15px;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  line-height: 1;
+}
+
+.terminal-button.minimize {
+  background-color: #ffbd2e;
+}
+
+.terminal-button.maximize {
+  background-color: #27ca3f;
 }
 
 .about-header {
@@ -74,12 +117,18 @@
 }
 
 .about-content {
-  /* No margin-bottom - let content flow naturally */
-  padding: 20px;
+  padding: 40px;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+  min-height: calc(100vh - 200px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .about-banner {
-  margin-bottom: 30px;
+  margin-bottom: 40px;
   text-align: center;
 }
 
@@ -88,11 +137,15 @@
   height: auto;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  max-height: 300px;
+  object-fit: cover;
 }
 
 .about-content p {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   font-size: 16px;
+  line-height: 1.8;
+  text-align: left;
 }
 
 .about-logo {
@@ -146,6 +199,11 @@
     justify-content: space-between;
   }
   
+  .about-content {
+    padding: 20px;
+    max-width: 100%;
+  }
+  
   .about-footer .about-logo img {
     height: 40px;
     margin-top: 30px;
@@ -157,10 +215,6 @@
   
   .about-footer {
     padding-bottom: 20px; /* Add bottom padding to footer */
-  }
-  
-  .about-content {
-    padding: 20px;
   }
 }
 
