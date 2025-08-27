@@ -231,6 +231,13 @@ html, body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+/* Hide command directory on mobile */
+@media (max-width: 768px) {
+  .command-directory {
+    display: none;
+  }
+}
+
 .command-directory-header {
   display: flex;
   align-items: center;

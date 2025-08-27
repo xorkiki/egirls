@@ -555,6 +555,15 @@ const Terminal = ({ onClose }) => {
       { type: 'system', content: 'Last login: Tue Nov 11 11:11:11 on console' }
     ]);
 
+    // On mobile, automatically show available commands
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+      // Add a small delay to make it feel natural
+      setTimeout(() => {
+        typeOutText(commands.help);
+      }, 1000);
+    }
+
     // Focus input on mount
     if (inputRef.current) {
       inputRef.current.focus();
