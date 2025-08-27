@@ -131,15 +131,15 @@ const DraggableFolder = ({ name, initialX, initialY, onOpen }) => {
 };
 
 const Photos = ({ onClose, onNavigateToWineNight, onNavigateToTattoos }) => {
-  // Generate random but centered positions for folders
+  // Generate random but centered positions for folders with better viewport handling
   const getRandomCenteredPosition = () => {
-    // Get viewport dimensions
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
+    // Get current viewport dimensions with fallbacks
+    const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 375;
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 667;
     
     // Define safe zones (avoiding edges and header/footer)
-    const safeZoneWidth = Math.min(viewportWidth * 0.6, 600); // 60% of viewport or max 600px
-    const safeZoneHeight = Math.min(viewportHeight * 0.6, 400); // 60% of viewport or max 400px
+    const safeZoneWidth = Math.min(viewportWidth * 0.5, 400); // 50% of viewport or max 400px
+    const safeZoneHeight = Math.min(viewportHeight * 0.5, 300); // 50% of viewport or max 300px
     
     // Calculate center offsets
     const centerX = viewportWidth / 2;
@@ -149,21 +149,84 @@ const Photos = ({ onClose, onNavigateToWineNight, onNavigateToTattoos }) => {
     const randomX = centerX + (Math.random() - 0.5) * safeZoneWidth;
     const randomY = centerY + (Math.random() - 0.5) * safeZoneHeight;
     
-    // Ensure folders stay within viewport bounds
-    const maxX = viewportWidth - 100; // Account for folder width
-    const maxY = viewportHeight - 120; // Account for folder height and header
+    // Ensure folders stay within viewport bounds with better margins
+    const folderWidth = 80; // Approximate folder width
+    const folderHeight = 100; // Approximate folder height
+    const headerHeight = 60; // Approximate header height
+    const footerHeight = 80; // Approximate footer height
+    
+    const maxX = viewportWidth - folderWidth - 20; // 20px margin from right edge
+    const maxY = viewportHeight - folderHeight - footerHeight - 20; // 20px margin from bottom
+    const minY = headerHeight + 20; // 20px margin below header
     
     return {
-      x: Math.max(50, Math.min(maxX, randomX)),
-      y: Math.max(80, Math.min(maxY, randomY)) // Start below header
+      x: Math.max(20, Math.min(maxX, randomX)), // 20px margin from left edge
+      y: Math.max(minY, Math.min(maxY, randomY))
     };
   };
 
-  // Generate initial positions
-  const [folderPositions] = React.useState(() => ({
+  // Fallback positions if random positioning fails
+  const getFallbackPosition = (index) => {
+    const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 375;
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 667;
+    
+    // Simple grid-based fallback positioning
+    const gridX = index === 0 ? 0.3 : 0.7; // Left or right side
+    const gridY = 0.5; // Middle of screen
+    
+    return {
+      x: Math.max(20, Math.min(viewportWidth - 100, viewportWidth * gridX)),
+      y: Math.max(80, Math.min(viewportHeight - 180, viewportHeight * gridY))
+    };
+  };
+
+  // Use state to store positions and update them when viewport changes
+  const [folderPositions, setFolderPositions] = React.useState(() => ({
     wineNight: getRandomCenteredPosition(),
     tattoos: getRandomCenteredPosition()
   }));
+
+  // Update positions when viewport changes (orientation change, resize, etc.)
+  React.useEffect(() => {
+    const handleResize = () => {
+      const newPositions = {
+        wineNight: getRandomCenteredPosition(),
+        tattoos: getRandomCenteredPosition()
+      };
+      
+      // Validate positions are within bounds
+      const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 375;
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 667;
+      
+      if (newPositions.wineNight.x < 0 || newPositions.wineNight.x > viewportWidth - 100 ||
+          newPositions.wineNight.y < 60 || newPositions.wineNight.y > viewportHeight - 180) {
+        newPositions.wineNight = getFallbackPosition(0);
+      }
+      
+      if (newPositions.tattoos.x < 0 || newPositions.tattoos.x > viewportWidth - 100 ||
+          newPositions.tattoos.y < 60 || newPositions.tattoos.y > viewportHeight - 180) {
+        newPositions.tattoos = getFallbackPosition(1);
+      }
+      
+      setFolderPositions(newPositions);
+    };
+
+    // Debounce resize events
+    let timeoutId;
+    const debouncedResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(handleResize, 100);
+    };
+
+    window.addEventListener('resize', debouncedResize);
+    window.addEventListener('orientationchange', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', debouncedResize);
+      window.removeEventListener('orientationchange', handleResize);
+      clearTimeout(timeoutId);
+    };
+  }, []);
 
   return (
     <div className="photos-page">

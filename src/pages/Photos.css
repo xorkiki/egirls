@@ -183,13 +183,34 @@
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
   .photos-header {
-    padding: 15px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
+    padding: 12px 15px;
+    min-height: 50px;
   }
   
+  .terminal-title {
+    font-size: 16px;
+  }
+  
+  .draggable-folder {
+    min-width: 70px;
+    min-height: 90px;
+    padding: 8px;
+  }
+  
+  .folder-icon {
+    height: 56px;
+    margin-bottom: 10px;
+  }
+  
+  .folder-name {
+    font-size: 13px;
+  }
+  
+  /* Ensure folders stay within mobile viewport */
   .photos-content {
-    padding: 20px;
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 130px);
+    overflow: hidden;
   }
 }
