@@ -772,18 +772,21 @@ const Terminal = ({ onClose }) => {
   ];
 
   // Add ESC key functionality to close the terminal and return to landing page
+  // Only active when on the main terminal page, not on sub-pages
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
+      if (e.key === 'Escape' && currentPage === 'terminal') {
+        e.preventDefault();
+        e.stopPropagation();
         onClose();
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown, true); // Use capture phase
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown, true);
     };
-  }, [onClose]);
+  }, [onClose, currentPage]);
 
   useEffect(() => {
     // Add initial terminal output - only the login message, no prompt

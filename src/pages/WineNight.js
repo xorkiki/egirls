@@ -249,13 +249,15 @@ const WineNight = ({ onClose }) => {
   React.useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
         onClose();
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown, true); // Use capture phase
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown, true);
     };
   }, [onClose]);
 
