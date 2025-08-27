@@ -758,8 +758,48 @@ html, body {
   height: 100%;
 }
 
+/* Identity page specific styles */
+.identity-collage-wrapper {
+  width: 100%;
+  height: calc(100vh - 200px);
+  position: relative;
+  overflow: visible;
+}
+
+.identity-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+}
+
+.identity-logo {
+  width: 60px;
+  height: 60px;
+}
+
+.identity-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .about-content {
   /* No margin-bottom - let content flow naturally */
+}
+
+/* Brand page styling (now identity page) */
+.brand-page {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: #000;
+  overflow: hidden;
 }
 
 .about-banner {

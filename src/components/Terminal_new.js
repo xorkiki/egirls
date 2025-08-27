@@ -185,6 +185,297 @@ const PhotoTimeline = () => {
   );
 };
 
+// Digital Collage Component with responsive positioning
+const DigitalCollage = () => {
+  const containerRef = useRef(null);
+  const [hoveredImage, setHoveredImage] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [loadedImages, setLoadedImages] = useState(new Set());
+  const [visibleImages, setVisibleImages] = useState(new Set());
+
+  // Brand photos array
+  const brandPhotos = [
+    '/brand/EGIRLS INITIATION ENVELOPE MOCKUP.jpg',
+    '/brand/EGIRLS LSD EDIT copy smol.png',
+    '/brand/EGIRLS TV WALL MOCKUP.jpg',
+    '/brand/EVERYTHING WILL KILL YOU POSTER (1).jpg',
+    '/brand/STAGE 2 EGIRLS.jpg',
+    '/brand/TRAFFIC LIGHT smol.png',
+    '/brand/WhatsApp Image 2025-06-04 at 14.35.32 (3).jpeg',
+    '/brand/WhatsApp Image 2025-06-04 at 14.35.32 (4).jpeg',
+    '/brand/WhatsApp Image 2025-06-04 at 14.35.32 (5).jpeg',
+    '/brand/WhatsApp Image 2025-06-05 at 22.42.36.jpeg',
+    '/brand/WhatsApp Image 2025-06-10 at 18.02.52 (1).jpeg',
+    '/brand/WhatsApp Image 2025-06-11 at 13.10.45 (1).jpeg',
+    '/brand/WhatsApp Image 2025-06-11 at 14.23.40 (3).jpeg',
+    '/brand/WhatsApp Image 2025-06-11 at 14.23.41 (1).jpeg',
+    '/brand/WhatsApp Image 2025-06-12 at 23.17.49 (2).jpeg',
+    '/brand/WhatsApp Image 2025-06-12 at 23.17.50 (1).jpeg',
+    '/brand/WhatsApp Image 2025-08-20 at 15.04.27.jpeg',
+    '/brand/billboard.jpg',
+    '/brand/cd-case.jpg',
+    '/brand/floppy-disk.jpg',
+    '/brand/window-poster.jpg'
+  ];
+
+  // Responsive image positioning based on screen size
+  const imageStyles = useMemo(() => {
+    const isMobile = window.innerWidth <= 768;
+    const isSmallMobile = window.innerWidth <= 480;
+    const isTinyMobile = window.innerWidth <= 360;
+    
+    // Responsive dimensions
+    let imageWidth, imageHeight;
+    if (isTinyMobile) {
+      imageWidth = 80;
+      imageHeight = 60;
+    } else if (isSmallMobile) {
+      imageWidth = 120;
+      imageHeight = 90;
+    } else if (isMobile) {
+      imageWidth = 200;
+      imageHeight = 150;
+    } else {
+      imageWidth = 400;
+      imageHeight = 300;
+    }
+
+    const padding = isMobile ? 15 : 25;
+    const minSpacing = isMobile ? 30 : 50;
+    const headerHeight = 45;
+    const footerHeight = 120;
+    const safeHeight = window.innerHeight - headerHeight - footerHeight;
+    const centerX = window.innerWidth / 2;
+    const centerY = headerHeight + (safeHeight / 2);
+    const availableWidth = window.innerWidth - (padding * 2);
+    const availableHeight = safeHeight - (padding * 2);
+    
+    // Adjust spread factor for mobile
+    const spreadFactor = isMobile ? 0.95 : 0.8;
+    const maxOffsetX = (availableWidth * spreadFactor) / 2;
+    const maxOffsetY = (availableHeight * spreadFactor) / 2;
+    
+    const placedImages = [];
+    
+    return brandPhotos.map((_, index) => {
+      let attempts = 0;
+      let posX, posY;
+      let validPosition = false;
+      
+      while (attempts < 50 && !validPosition) {
+        attempts++;
+        
+        // Use different distribution patterns for mobile vs desktop
+        if (isMobile) {
+          // Mobile: More grid-like distribution for better screen coverage
+          const gridCols = Math.ceil(Math.sqrt(brandPhotos.length));
+          const gridRows = Math.ceil(brandPhotos.length / gridCols);
+          const gridCol = index % gridCols;
+          const gridRow = Math.floor(index / gridCols);
+          
+          const cellWidth = availableWidth / gridCols;
+          const cellHeight = availableHeight / gridRows;
+          
+          const gridX = (gridCol * cellWidth) - (availableWidth / 2) + (cellWidth / 2);
+          const gridY = (gridRow * cellHeight) - (availableHeight / 2) + (cellHeight / 2);
+          
+          // Add some randomness within each grid cell
+          const randomX = (Math.random() - 0.5) * (cellWidth * 0.3);
+          const randomY = (Math.random() - 0.5) * (cellHeight * 0.3);
+          
+          posX = centerX + gridX + randomX - (imageWidth / 2);
+          posY = centerY + gridY + randomY - (imageHeight / 2);
+        } else {
+          // Desktop: Original clustering algorithm
+          const clusterWidth = availableWidth * 0.7;
+          const clusterHeight = availableHeight * 0.7;
+          const gridCols = Math.ceil(Math.sqrt(brandPhotos.length));
+          const gridRows = Math.ceil(brandPhotos.length / gridCols);
+          const gridCol = index % gridCols;
+          const gridRow = Math.floor(index / gridCols);
+          const cellWidth = clusterWidth / gridCols;
+          const cellHeight = clusterHeight / gridRows;
+          const gridX = (gridCol * cellWidth) - (clusterWidth / 2) + (cellWidth / 2);
+          const gridY = (gridRow * cellHeight) - (clusterHeight / 2) + (cellHeight / 2);
+          const randomX = (Math.random() - 0.5) * (cellWidth * 0.5);
+          const randomY = (Math.random() - 0.5) * (cellHeight * 0.5);
+          posX = centerX + gridX + randomX - (imageWidth / 2);
+          posY = centerY + gridY + randomY - (imageHeight / 2);
+        }
+        
+        // Clamp positions to viewport bounds
+        const minX = padding;
+        const maxX = window.innerWidth - imageWidth - padding;
+        const minY = headerHeight + padding;
+        const maxY = window.innerHeight - footerHeight - imageHeight - padding;
+        
+        posX = Math.max(minX, Math.min(maxX, posX));
+        posY = Math.max(minY, Math.min(maxY, posY));
+        
+        validPosition = true;
+        
+        // Check collision with other images
+        for (const placed of placedImages) {
+          const distanceX = Math.abs(posX - placed.x);
+          const distanceY = Math.abs(posY - placed.y);
+          const combinedDistance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+          if (combinedDistance < minSpacing) {
+            validPosition = false;
+            break;
+          }
+        }
+      }
+      
+      placedImages.push({ x: posX, y: posY });
+      
+      return {
+        position: 'absolute',
+        left: `${posX + dragOffset.x}px`,
+        top: `${posY + dragOffset.y}px`,
+        transform: `rotate(${(Math.random() - 0.5) * 30}deg)`,
+        zIndex: index,
+        opacity: 1,
+        transition: isDragging ? 'none' : 'transform 0.3s ease-out'
+      };
+    });
+  }, [brandPhotos, dragOffset.x, dragOffset.y, isDragging]);
+
+  // Mouse and touch event handlers
+  const handleMouseDown = (e) => {
+    if (e.button === 0) {
+      setIsDragging(true);
+      setDragStart({ x: e.clientX - dragOffset.x, y: e.clientY - dragOffset.y });
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    if (isDragging) {
+      setDragOffset({
+        x: e.clientX - dragStart.x,
+        y: e.clientY - dragStart.y
+      });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleTouchStart = (e) => {
+    if (e.touches.length === 1) {
+      setIsDragging(true);
+      setDragStart({
+        x: e.touches[0].clientX - dragOffset.x,
+        y: e.touches[0].clientY - dragOffset.y
+      });
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (isDragging && e.touches.length === 1) {
+      e.preventDefault();
+      setDragOffset({
+        x: e.touches[0].clientX - dragStart.x,
+        y: e.touches[0].clientY - dragStart.y
+      });
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
+
+  // Intersection Observer for lazy loading
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const imageIndex = parseInt(entry.target.dataset.index);
+            setVisibleImages(prev => new Set([...prev, imageIndex]));
+          }
+        });
+      },
+      { rootMargin: '100px', threshold: 0.1 }
+    );
+
+    const imageContainers = containerRef.current?.querySelectorAll('.collage-image');
+    imageContainers?.forEach((container, index) => {
+      container.dataset.index = index;
+      observer.observe(container);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      className="digital-collage-container"
+      ref={containerRef}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+    >
+      {brandPhotos.map((photo, index) => (
+        <div
+          key={index}
+          className={`collage-image ${hoveredImage === index ? 'hovered' : ''}`}
+          style={imageStyles[index]}
+          onMouseEnter={() => setHoveredImage(index)}
+          onMouseLeave={() => setHoveredImage(null)}
+        >
+          {visibleImages.has(index) ? (
+            <img
+              src={photo}
+              alt={`Brand asset ${index + 1}`}
+              draggable="false"
+              loading="lazy"
+              onMouseEnter={() => setHoveredImage(index)}
+              onMouseLeave={() => setHoveredImage(null)}
+              style={{
+                opacity: loadedImages.has(index) ? 1 : 0,
+                transition: 'opacity 0.3s ease-in'
+              }}
+              onLoad={(e) => {
+                setLoadedImages(prev => new Set([...prev, index]));
+                e.target.style.opacity = '1';
+              }}
+              onError={(e) => {
+                console.error('Failed to load image:', photo);
+                e.target.style.opacity = '0.5';
+              }}
+            />
+          ) : (
+            <div
+              className="image-placeholder"
+              style={{
+                width: '100%',
+                height: '100%',
+                backgroundColor: '#1a1a1a',
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#666',
+                fontSize: '14px'
+              }}
+            >
+              Loading...
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
 // Draggable Folder Component
 const DraggableFolder = ({ name, initialX, initialY, onOpen }) => {
   const [position, setPosition] = useState({ x: initialX, y: initialY });
@@ -545,13 +836,24 @@ const Terminal = ({ onClose }) => {
     return (
       <div className="brand-page">
         <div className="brand-header">
-          <button className="back-button" onClick={() => setCurrentPage('terminal')}>
-            ← Back to Terminal
-          </button>
-          <h1>Brand</h1>
+          <div className="terminal-buttons">
+            <div className="terminal-button close" onClick={() => setCurrentPage('terminal')}>
+              <span className="close-icon">×</span>
+            </div>
+            <div className="terminal-button minimize"></div>
+            <div className="terminal-button maximize"></div>
+          </div>
+          <div className="terminal-title">identity</div>
         </div>
-        <div className="brand-content">
-          <p>Brand information coming soon...</p>
+        <div className="identity-content">
+          <div className="identity-collage-wrapper">
+            <DigitalCollage />
+          </div>
+        </div>
+        <div className="identity-footer">
+          <div className="identity-logo">
+            <img src="/egirl_logo.svg" alt="egirls logo" />
+          </div>
         </div>
       </div>
     );
