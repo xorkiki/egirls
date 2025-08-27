@@ -92,9 +92,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  /* Debug: add border to see container bounds */
-  border: 2px solid blue;
-  background-color: rgba(0, 0, 255, 0.05);
+
 }
 
 .draggable-folder {
@@ -108,9 +106,7 @@
   -webkit-touch-callout: none;
   touch-action: none;
   z-index: 1;
-  /* Temporary debugging - make folders visible */
-  border: 2px solid red;
-  background-color: rgba(255, 0, 0, 0.1);
+
 }
 
 .folder-icon {
