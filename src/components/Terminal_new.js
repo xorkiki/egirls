@@ -287,24 +287,9 @@ const DigitalCollage = () => {
         
         // Use different distribution patterns for mobile vs desktop
         if (isMobile) {
-          // Mobile: More grid-like distribution for better screen coverage
-          const gridCols = Math.ceil(Math.sqrt(brandPhotos.length));
-          const gridRows = Math.ceil(brandPhotos.length / gridCols);
-          const gridCol = index % gridCols;
-          const gridRow = Math.floor(index / gridCols);
-          
-          const cellWidth = availableWidth / gridCols;
-          const cellHeight = availableHeight / gridRows;
-          
-          const gridX = (gridCol * cellWidth) - (availableWidth / 2) + (cellWidth / 2);
-          const gridY = (gridRow * cellHeight) - (availableHeight / 2) + (cellHeight / 2);
-          
-          // Add some randomness within each grid cell
-          const randomX = (Math.random() - 0.5) * (cellWidth * 0.3);
-          const randomY = (Math.random() - 0.5) * (cellHeight * 0.3);
-          
-          posX = centerX + gridX + randomX - (imageWidth / 2);
-          posY = centerY + gridY + randomY - (imageHeight / 2);
+          // Mobile: Simple random distribution across entire screen
+          posX = padding + (Math.random() * (availableWidth - imageWidth));
+          posY = headerHeight + padding + (Math.random() * (availableHeight - imageHeight));
         } else {
           // Desktop: Original clustering algorithm
           const clusterWidth = availableWidth * 0.7;
@@ -325,9 +310,9 @@ const DigitalCollage = () => {
         
         // Clamp positions to viewport bounds
         const minX = padding;
-        const maxX = window.innerWidth - imageWidth - padding;
+        const maxX = windowSize.width - imageWidth - padding;
         const minY = headerHeight + padding;
-        const maxY = window.innerHeight - footerHeight - imageHeight - padding;
+        const maxY = windowSize.height - footerHeight - imageHeight - padding;
         
         posX = Math.max(minX, Math.min(maxX, posX));
         posY = Math.max(minY, Math.min(maxY, posY));
@@ -347,6 +332,11 @@ const DigitalCollage = () => {
       }
       
       placedImages.push({ x: posX, y: posY });
+      
+      // Debug logging for first few images
+      if (index < 5) {
+        console.log(`Image ${index}: posX=${posX}, posY=${posY}, isMobile=${isMobile}, availableWidth=${availableWidth}, availableHeight=${availableHeight}`);
+      }
       
       return {
         position: 'absolute',
