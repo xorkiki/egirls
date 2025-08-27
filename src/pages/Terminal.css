@@ -390,7 +390,6 @@ html, body {
 }
 
 /* Page Styles */
-.about-page,
 .photos-page,
 .identity-page,
 .manifesto-page {
@@ -406,15 +405,6 @@ html, body {
   z-index: 1000;
 }
 
-.about-page {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  overflow-y: auto; /* Allow vertical scrolling if content is too long */
-  background-color: #000;
-}
-
-  .about-header,
   .photos-header,
   .identity-header,
   .transmissions-header,
@@ -429,14 +419,12 @@ html, body {
   min-height: 44px;
 }
 
-.about-header .terminal-buttons,
   .photos-header .terminal-buttons,
   .manifesto-header .terminal-buttons {
   display: flex;
   gap: 9px;
 }
 
-.about-header .terminal-button,
   .photos-header .terminal-button,
   .manifesto-header .terminal-button {
   width: 14px;
@@ -447,42 +435,36 @@ html, body {
   transition: all 0.2s ease;
 }
 
-.about-header .terminal-button.close,
 .photos-header .terminal-button.close,
 .identity-header .terminal-button.close,
 .manifesto-header .terminal-button.close {
   background-color: #ff5f56;
 }
 
-.about-header .terminal-button.close:hover,
 .photos-header .terminal-button.close:hover,
 .identity-header .terminal-button.close:hover,
 .manifesto-header .terminal-button.close:hover {
   background-color: #ff4444;
 }
 
-.about-header .terminal-button.close:hover .close-icon,
 .photos-header .terminal-button.close:hover .close-icon,
 .identity-header .terminal-button.close:hover .close-icon,
 .manifesto-header .terminal-button.close:hover .close-icon {
   opacity: 1;
 }
 
-.about-header .terminal-button.minimize,
 .photos-header .terminal-button.minimize,
 .identity-header .terminal-button.minimize,
 .manifesto-header .terminal-button.minimize {
   background-color: #ffbd2e;
 }
 
-.about-header .terminal-button.maximize,
 .photos-header .terminal-button.maximize,
 .identity-header .terminal-button.maximize,
 .manifesto-header .terminal-button.maximize {
   background-color: #27ca3f;
 }
 
-.about-header .terminal-title,
 .photos-header .terminal-title,
 .identity-header .terminal-title,
 .manifesto-header .terminal-title {
@@ -508,48 +490,9 @@ html, body {
   filter: brightness(0) invert(1);
 }
 
-.about-logo {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 40px;
-  padding-top: 20px;
-}
 
-.about-logo img {
-  height: 60px;
-  width: auto;
-  filter: brightness(0) invert(1);
-}
 
-.about-footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 20px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: none;
-  outline: none;
-  background: transparent;
-}
 
-.about-footer .about-logo {
-  margin: 0 0 20px 0;
-  padding: 0;
-  border: none;
-  outline: none;
-  box-shadow: none;
-}
-
-.about-footer .about-logo img {
-  height: 50px;
-  width: auto;
-  filter: brightness(0) invert(1);
-  margin-top: 40px;
-}
 
 /* Identity Footer - matching about page */
 .identity-footer {
@@ -729,7 +672,6 @@ html, body {
 
 
 
-  .about-content,
   .photos-content,
   .identity-content,
   .transmissions-content,
@@ -780,9 +722,7 @@ html, body {
   object-fit: contain;
 }
 
-.about-content {
-  /* No margin-bottom - let content flow naturally */
-}
+
 
 /* Brand page styling (now identity page) */
 .brand-page {
@@ -793,19 +733,8 @@ html, body {
   overflow: hidden;
 }
 
-.about-banner {
-  margin-bottom: 30px;
-  text-align: center;
-}
 
-.about-banner img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
 
-.about-content h2,
 .manifesto-content h2 {
   color: #0f0;
   font-size: 20px;
@@ -813,7 +742,6 @@ html, body {
   margin-top: 0;
 }
 
-.about-content p,
 .photos-content p,
 .identity-content p {
   margin-bottom: 20px;
@@ -1378,7 +1306,6 @@ html, body {
     font-size: 12px;
   }
   
-  .about-header,
   .photos-header,
   .identity-header,
   .manifesto-header {
@@ -1388,26 +1315,6 @@ html, body {
     gap: 15px;
   }
   
-  .about-header {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  .about-footer .about-logo img {
-    height: 40px;
-    margin-top: 30px;
-  }
-  
-  .about-content {
-    padding-bottom: 20px; /* Normal padding since logo is hidden on small screens */
-  }
-  
-  .about-footer {
-    padding-bottom: 20px; /* Add bottom padding to footer */
-  }
-  
-  .about-content,
   .photos-content,
   .identity-content,
   .manifesto-content {
@@ -1448,14 +1355,7 @@ html, body {
     white-space: normal;
   }
   
-  .about-content {
-    padding: 20px 15px 20px 15px; /* Normal padding since logo is hidden on small screens */
-  }
-  
-  .about-footer .about-logo img {
-    height: 35px; /* Slightly smaller on very small screens */
-    margin-top: 25px;
-  }
+
   
   /* Wine Night very small screen improvements */
   .wine-night-thanks {
