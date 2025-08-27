@@ -261,81 +261,56 @@ const DigitalCollage = () => {
     }
 
     const padding = isMobile ? 15 : 25;
-    const minSpacing = isMobile ? 30 : 50;
     const headerHeight = 45;
     const footerHeight = 120;
     const safeHeight = windowSize.height - headerHeight - footerHeight;
-    const centerX = windowSize.width / 2;
-    const centerY = headerHeight + (safeHeight / 2);
     const availableWidth = windowSize.width - (padding * 2);
     const availableHeight = safeHeight - (padding * 2);
     
-    // Adjust spread factor for mobile
-    const spreadFactor = isMobile ? 0.95 : 0.8;
-    const maxOffsetX = (availableWidth * spreadFactor) / 2;
-    const maxOffsetY = (availableHeight * spreadFactor) / 2;
-    
-    const placedImages = [];
+    console.log('Positioning calculation:', {
+      isMobile,
+      windowSize,
+      imageWidth,
+      imageHeight,
+      availableWidth,
+      availableHeight,
+      padding
+    });
     
     return brandPhotos.map((_, index) => {
-      let attempts = 0;
       let posX, posY;
-      let validPosition = false;
       
-      while (attempts < 50 && !validPosition) {
-        attempts++;
+      if (isMobile) {
+        // Mobile: Force distribution across entire screen width
+        const sectionWidth = availableWidth / 4; // Divide screen into 4 sections
+        const section = index % 4;
+        const sectionX = padding + (section * sectionWidth);
         
-        // Use different distribution patterns for mobile vs desktop
-        if (isMobile) {
-          // Mobile: Simple random distribution across entire screen
-          posX = padding + (Math.random() * (availableWidth - imageWidth));
-          posY = headerHeight + padding + (Math.random() * (availableHeight - imageHeight));
-        } else {
-          // Desktop: Original clustering algorithm
-          const clusterWidth = availableWidth * 0.7;
-          const clusterHeight = availableHeight * 0.7;
-          const gridCols = Math.ceil(Math.sqrt(brandPhotos.length));
-          const gridRows = Math.ceil(brandPhotos.length / gridCols);
-          const gridCol = index % gridCols;
-          const gridRow = Math.floor(index / gridCols);
-          const cellWidth = clusterWidth / gridCols;
-          const cellHeight = clusterHeight / gridRows;
-          const gridX = (gridCol * cellWidth) - (clusterWidth / 2) + (cellWidth / 2);
-          const gridY = (gridRow * cellHeight) - (clusterHeight / 2) + (cellHeight / 2);
-          const randomX = (Math.random() - 0.5) * (cellWidth * 0.5);
-          const randomY = (Math.random() - 0.5) * (cellHeight * 0.5);
-          posX = centerX + gridX + randomX - (imageWidth / 2);
-          posY = centerY + gridY + randomY - (imageHeight / 2);
-        }
+        // Random position within each section
+        posX = sectionX + (Math.random() * (sectionWidth - imageWidth));
+        posY = headerHeight + padding + (Math.random() * (availableHeight - imageHeight));
         
-        // Clamp positions to viewport bounds
-        const minX = padding;
-        const maxX = windowSize.width - imageWidth - padding;
-        const minY = headerHeight + padding;
-        const maxY = windowSize.height - footerHeight - imageHeight - padding;
+        // Ensure we don't go outside bounds
+        posX = Math.max(padding, Math.min(windowSize.width - imageWidth - padding, posX));
+        posY = Math.max(headerHeight + padding, Math.min(windowSize.height - footerHeight - imageHeight - padding, posY));
+      } else {
+        // Desktop: Center clustering
+        const centerX = windowSize.width / 2;
+        const centerY = headerHeight + (safeHeight / 2);
+        const clusterWidth = availableWidth * 0.7;
+        const clusterHeight = availableHeight * 0.7;
         
-        posX = Math.max(minX, Math.min(maxX, posX));
-        posY = Math.max(minY, Math.min(maxY, posY));
+        posX = centerX - (clusterWidth / 2) + (Math.random() * clusterWidth) - (imageWidth / 2);
+        posY = centerY - (clusterHeight / 2) + (Math.random() * clusterHeight) - (imageHeight / 2);
         
-        validPosition = true;
-        
-        // Check collision with other images
-        for (const placed of placedImages) {
-          const distanceX = Math.abs(posX - placed.x);
-          const distanceY = Math.abs(posY - placed.y);
-          const combinedDistance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-          if (combinedDistance < minSpacing) {
-            validPosition = false;
-            break;
-          }
-        }
+        // Clamp to viewport
+        posX = Math.max(padding, Math.min(windowSize.width - imageWidth - padding, posX));
+        posY = Math.max(headerHeight + padding, Math.min(windowSize.height - footerHeight - imageHeight - padding, posY));
       }
-      
-      placedImages.push({ x: posX, y: posY });
       
       // Debug logging for first few images
       if (index < 5) {
-        console.log(`Image ${index}: posX=${posX}, posY=${posY}, isMobile=${isMobile}, availableWidth=${availableWidth}, availableHeight=${availableHeight}`);
+        console.log(`Image ${index}: posX=${posX}, posY=${posY}, isMobile=${isMobile}, section=${index % 4}`);
       }
       
       return {
