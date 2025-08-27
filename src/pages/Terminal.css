@@ -1263,6 +1263,7 @@ html, body {
     height: 14px;
     margin-left: 0;
     top: -1px;
+    transform: translateY(2px);
   }
   
   .command-directory {
@@ -1316,6 +1317,16 @@ html, body {
   }
 }
 
+/* Medium-small mobile screens */
+@media (max-width: 600px) and (min-width: 451px) {
+  .terminal-cursor {
+    height: 13px !important;
+    width: 6.5px !important;
+    top: -1.5px !important;
+    transform: translateY(2.5px) !important;
+  }
+}
+
 /* Very narrow screens (like 412px width) */
 @media (max-width: 450px) {
   .terminal-content {
@@ -1330,6 +1341,14 @@ html, body {
   
   .terminal-input-line {
     white-space: normal;
+  }
+  
+  /* Enhanced cursor positioning for very small screens */
+  .terminal-cursor {
+    height: 12px !important;
+    width: 6px !important;
+    top: -2px !important;
+    transform: translateY(3px) !important;
   }
   
 

@@ -1,10 +1,68 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import About from './About';
 import Photos from './Photos';
 import WineNight from './WineNight';
 import Tattoos from './Tattoos';
 
 import './Terminal.css';
+
+// Custom hook for mobile detection and cursor positioning
+const useMobileCursorPosition = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  const [isSmallMobile, setIsSmallMobile] = useState(false);
+  const [isLandscape, setIsLandscape] = useState(false);
+
+  useEffect(() => {
+    const checkDevice = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      
+      setIsMobile(width <= 768);
+      setIsSmallMobile(width <= 450);
+      setIsLandscape(width > height);
+    };
+
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+    window.addEventListener('orientationchange', checkDevice);
+
+    return () => {
+      window.removeEventListener('resize', checkDevice);
+      window.removeEventListener('orientationchange', checkDevice);
+    };
+  }, []);
+
+  const getCursorStyles = useCallback(() => {
+    if (!isMobile) {
+      return {
+        top: '0',
+        transform: 'none',
+        height: '16px',
+        width: '8px'
+      };
+    }
+
+    // Mobile-specific cursor positioning
+    if (isSmallMobile) {
+      return {
+        top: '-2px',
+        transform: 'translateY(3px)',
+        height: '12px',
+        width: '6px'
+      };
+    }
+
+    // Regular mobile
+    return {
+      top: '-1px',
+      transform: 'translateY(2px)',
+      height: '14px',
+      width: '7px'
+    };
+  }, [isMobile, isSmallMobile]);
+
+  return { isMobile, isSmallMobile, isLandscape, getCursorStyles };
+};
 
 // Wine Night Photos Array - All 89 Photos in Sequential Order
 const wineNightPhotos = [
@@ -701,6 +759,9 @@ const Terminal = ({ onClose }) => {
   const inputRef = useRef(null);
   const outputRef = useRef(null);
   const promptRef = useRef(null);
+  
+  // Use custom hook for mobile cursor positioning
+  const { isMobile, isSmallMobile, isLandscape, getCursorStyles } = useMobileCursorPosition();
 
   const commands = {
     'help': 'Available commands:\n• cd about/ - Navigate to about page\n• cd photos/ - Navigate to photos page\n• cd identity/ - Navigate to identity page\n• cd frequencies/ - Toggle music player (desktop only)\n• cat manifesto.txt - Display manifesto in terminal\n• help - Show this help\n• clear - Clear terminal\n• exit - Return to landing page',
@@ -1173,9 +1234,7 @@ const Terminal = ({ onClose }) => {
                 style={{
                   position: 'absolute',
                   left: `${promptWidth + inputWidth + 2}px`,
-                  top: window.innerWidth <= 768 ? '2px' : '0',
-                  // Mobile-specific adjustments
-                  transform: window.innerWidth <= 768 ? 'translateY(0)' : 'none'
+                  ...getCursorStyles()
                 }}
               ></span>
             )}
