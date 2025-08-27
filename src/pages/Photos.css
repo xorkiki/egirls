@@ -76,10 +76,11 @@
 }
 
 .photos-content {
-  position: relative;
-  width: 100%;
-  height: calc(100vh - 44px - 80px); /* Full viewport minus header (44px) and footer (80px) */
+  position: absolute;
+  left: 0;
+  right: 0;
   top: 44px; /* Position below header */
+  bottom: 80px; /* Extend to just above footer */
   overflow: visible; /* Allow folders to be positioned anywhere in this area */
   display: block; /* Remove flex centering to allow absolute positioning */
   margin: 0;
