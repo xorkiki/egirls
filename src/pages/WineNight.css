@@ -128,7 +128,7 @@
   overflow: hidden; /* Hide scrollbars */
   position: relative;
   user-select: none; /* Prevent text selection during drag */
-  touch-action: none; /* Disable all browser touch actions */
+  touch-action: pan-x; /* Allow horizontal touch scrolling */
   -webkit-user-select: none; /* Safari support */
   -webkit-touch-callout: none; /* Disable callout on long press */
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
@@ -146,7 +146,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  touch-action: none; /* Disable touch actions */
+  touch-action: pan-x; /* Allow horizontal touch scrolling */
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   user-select: none;

@@ -135,6 +135,32 @@ const PhotoTimeline = () => {
     setTranslateX(-wrappedIndex * photoWidth);
   };
 
+  // Touch event handlers for mobile
+  const handleTouchStart = (e) => {
+    if (e.touches.length === 1) {
+      e.preventDefault();
+      setIsDragging(true);
+      setStartX(e.touches[0].clientX - translateX);
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging || e.touches.length !== 1) return;
+    
+    e.preventDefault(); // Prevent default scrolling
+    const newTranslateX = e.touches[0].clientX - startX;
+    setTranslateX(newTranslateX);
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+    const photoWidth = 250;
+    const snappedIndex = Math.round(-translateX / photoWidth);
+    const wrappedIndex = ((snappedIndex % wineNightPhotos.length) + wineNightPhotos.length) % wineNightPhotos.length;
+    setCurrentIndex(wrappedIndex);
+    setTranslateX(-wrappedIndex * photoWidth);
+  };
+
   // Calculate photo positions
   const getPhotoStyle = (index) => {
     const photoSpacing = 250;
@@ -166,6 +192,9 @@ const PhotoTimeline = () => {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
       style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
     >
       <div className="photo-timeline">
