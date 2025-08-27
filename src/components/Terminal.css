@@ -465,6 +465,7 @@ html, body {
   padding: 10px 18px;
   background-color: #1a1a1a;
   position: relative;
+  min-height: 44px;
 }
 
 .about-header .terminal-buttons,
@@ -1065,6 +1066,7 @@ html, body {
   padding: 10px 18px;
   background-color: #1a1a1a;
   position: relative;
+  min-height: 44px;
 }
 
 .transmissions-header .terminal-buttons {
@@ -1126,6 +1128,7 @@ html, body {
   padding: 10px 18px;
   background-color: #1a1a1a;
   position: relative;
+  min-height: 44px;
 }
 
 .tattoos-header .terminal-buttons {
@@ -1221,6 +1224,7 @@ html, body {
   padding: 10px 18px;
   background-color: #1a1a1a;
   position: relative;
+  min-height: 44px;
 }
 
 .wine-night-header .terminal-buttons {
