@@ -83,7 +83,7 @@
   left: 0;
   right: 0;
   top: 44px; /* Position below header */
-  bottom: 80px; /* Extend to just above footer */
+  height: calc(100vh - 44px - 80px); /* Calculate height instead of using bottom */
   width: 100vw; /* Force full viewport width */
   min-width: 100vw; /* Ensure minimum width */
   max-width: 100vw; /* Ensure maximum width */
