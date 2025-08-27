@@ -8,7 +8,6 @@ html, body {
   -webkit-user-select: none;
   user-select: none;
   height: 100%;
-  overflow: hidden;
 }
 
 /* Mobile viewport height fixes */
