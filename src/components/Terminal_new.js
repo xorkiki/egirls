@@ -560,7 +560,10 @@ const Terminal = ({ onClose }) => {
     if (isMobile) {
       // Add a small delay to make it feel natural
       setTimeout(() => {
-        typeOutText(commands.help);
+        setOutput(prev => [
+          ...prev,
+          { type: 'output', content: commands.help }
+        ]);
       }, 1000);
     }
 
