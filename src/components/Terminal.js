@@ -149,6 +149,38 @@ const PhotoTimeline = () => {
     setCurrentIndex(wrappedIndex);
     setTranslateX(-wrappedIndex * photoWidth);
   };
+
+  // Handle touch events for mobile swiping
+  const handleTouchStart = (e) => {
+    if (e.touches.length === 1) {
+      setIsDragging(true);
+      setStartX(e.touches[0].clientX - translateX);
+    }
+  };
+  
+  const handleTouchMove = (e) => {
+    if (!isDragging || e.touches.length !== 1) return;
+    
+    e.preventDefault(); // Prevent default scrolling
+    
+    // Use requestAnimationFrame for smooth touch dragging
+    requestAnimationFrame(() => {
+      const newTranslateX = e.touches[0].clientX - startX;
+      setTranslateX(newTranslateX);
+    });
+  };
+  
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+    
+    // Snap to nearest photo (INFINITE - with wrapping)
+    const photoWidth = 250; // Width of each photo (updated to match new spacing)
+    const snappedIndex = Math.round(-translateX / photoWidth);
+    const wrappedIndex = ((snappedIndex % wineNightPhotos.length) + wineNightPhotos.length) % wineNightPhotos.length;
+    
+    setCurrentIndex(wrappedIndex);
+    setTranslateX(-wrappedIndex * photoWidth);
+  };
   
   // Calculate positions for all photos (INFINITE)
   const getPhotoStyle = (index) => {
@@ -202,6 +234,9 @@ const PhotoTimeline = () => {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
       style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
     >
       <div className="photo-timeline">
@@ -280,6 +315,35 @@ const DraggableFolder = ({ name, initialX, initialY, onOpen }) => {
     }
   };
 
+  // Handle touch events for mobile
+  const handleTouchStart = (e) => {
+    if (e.touches.length === 1) {
+      e.preventDefault();
+      setIsDragging(true);
+      setDragStart({
+        x: e.touches[0].clientX - position.x,
+        y: e.touches[0].clientY - position.y
+      });
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging || e.touches.length !== 1) return;
+    
+    e.preventDefault(); // Prevent default scrolling
+    
+    requestAnimationFrame(() => {
+      setPosition({
+        x: e.touches[0].clientX - dragStart.x,
+        y: e.touches[0].clientY - dragStart.y
+      });
+    });
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
+
   useEffect(() => {
     if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove);
@@ -302,6 +366,9 @@ const DraggableFolder = ({ name, initialX, initialY, onOpen }) => {
       }}
       onMouseDown={handleMouseDown}
       onClick={handleClick}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       <img src="/macOSfolder.png" alt="folder" className="folder-icon" />
       <span className="folder-name">{name}</span>
@@ -312,15 +379,18 @@ const DraggableFolder = ({ name, initialX, initialY, onOpen }) => {
 const DigitalCollage = () => {
   const containerRef = useRef(null);
   const [hoveredImage, setHoveredImage] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
   // Define brandPhotos locally to avoid scope issues
   const brandPhotos = [
     '/brand/EGIRLS INITIATION ENVELOPE MOCKUP.jpg',
-    '/brand/EGIRLS LSD EDIT copy.jpg',
+    '/brand/EGIRLS LSD EDIT copy smol.png',
     '/brand/EGIRLS TV WALL MOCKUP.jpg',
     '/brand/EVERYTHING WILL KILL YOU POSTER (1).jpg',
     '/brand/STAGE 2 EGIRLS.jpg',
-    '/brand/TRAFFIC LIGHT.jpg',
+    '/brand/TRAFFIC LIGHT smol.png',
     '/brand/WhatsApp Image 2025-06-04 at 14.35.32 (3).jpeg',
     '/brand/WhatsApp Image 2025-06-04 at 14.35.32 (4).jpeg',
     '/brand/WhatsApp Image 2025-06-04 at 14.35.32 (5).jpeg',
@@ -357,7 +427,7 @@ const DigitalCollage = () => {
     const availableHeight = safeHeight - (padding * 2);
     
     // Create distribution across the full available space
-    const spreadFactor = 0.9; // Use 90% of available space
+    const spreadFactor = 0.8; // Use 80% of available space for better centering
     const maxOffsetX = (availableWidth * spreadFactor) / 2;
     const maxOffsetY = (availableHeight * spreadFactor) / 2;
     
@@ -377,8 +447,8 @@ const DigitalCollage = () => {
         const totalImages = brandPhotos.length;
         
         // Create a well-defined center cluster area with tighter boundaries
-        const clusterWidth = availableWidth * 0.6; // 60% of available width for tighter cluster
-        const clusterHeight = availableHeight * 0.6; // 60% of available height for tighter cluster
+        const clusterWidth = availableWidth * 0.7; // 70% of available width for better centering
+        const clusterHeight = availableHeight * 0.7; // 70% of available height for better centering
         
         // Calculate grid-like positions within the center cluster for even distribution
         const gridCols = Math.ceil(Math.sqrt(totalImages));
@@ -435,15 +505,15 @@ const DigitalCollage = () => {
       // Add this position to placed images
       placedImages.push({ x: posX, y: posY });
       
-      return {
-        position: 'absolute',
-        left: `${posX}px`,
-        top: `${posY}px`,
-        transform: `rotate(${(Math.random() - 0.5) * 30}deg)`,
-        zIndex: index,
-        opacity: 1,
-        transition: 'transform 0.3s ease-out'
-      };
+                  return {
+              position: 'absolute',
+              left: `${posX + dragOffset.x}px`,
+              top: `${posY + dragOffset.y}px`,
+              transform: `rotate(${(Math.random() - 0.5) * 30}deg)`,
+              zIndex: index,
+              opacity: 1,
+              transition: isDragging ? 'none' : 'transform 0.3s ease-out'
+            };
     });
   }, []);
 
@@ -455,8 +525,69 @@ const DigitalCollage = () => {
 
 
 
+  // Handle mouse drag
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setDragStart({
+      x: e.clientX - dragOffset.x,
+      y: e.clientY - dragOffset.y
+    });
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    
+    requestAnimationFrame(() => {
+      const newOffsetX = e.clientX - dragStart.x;
+      const newOffsetY = e.clientY - dragStart.y;
+      setDragOffset({ x: newOffsetX, y: newOffsetY });
+    });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  // Handle touch events for mobile swiping
+  const handleTouchStart = (e) => {
+    if (e.touches.length === 1) {
+      setIsDragging(true);
+      setDragStart({
+        x: e.touches[0].clientX - dragOffset.x,
+        y: e.touches[0].clientY - dragOffset.y
+      });
+    }
+  };
+  
+  const handleTouchMove = (e) => {
+    if (!isDragging || e.touches.length !== 1) return;
+    
+    e.preventDefault(); // Prevent default scrolling
+    
+    requestAnimationFrame(() => {
+      const newOffsetX = e.touches[0].clientX - dragStart.x;
+      const newOffsetY = e.touches[0].clientY - dragStart.y;
+      setDragOffset({ x: newOffsetX, y: newOffsetY });
+    });
+  };
+  
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
+
   return (
-    <div className="digital-collage-container" ref={containerRef}>
+    <div 
+      className="digital-collage-container" 
+      ref={containerRef}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+    >
       <div className="collage-content">
         {brandPhotos && brandPhotos.length > 0 ? (
           brandPhotos.map((photo, index) => (
