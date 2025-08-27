@@ -672,15 +672,7 @@ html, body {
 
 
 
-  .photos-content,
-  .identity-content,
-  .transmissions-content,
-  .manifesto-content {
-  padding: 40px;
-  max-width: 800px;
-  margin: 0 auto;
-  line-height: 1.6;
-}
+
 
 /* Override identity-content to use full width for collage */
 .identity-content {
@@ -742,7 +734,6 @@ html, body {
   margin-top: 0;
 }
 
-.photos-content p,
 .identity-content p {
   margin-bottom: 20px;
   font-size: 16px;
@@ -754,20 +745,7 @@ html, body {
   white-space: pre-wrap;
 }
 
-.photos-page {
-  position: relative;
-  background-color: #000;
-}
 
-.photos-content {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
 .draggable-folder {
   display: flex;
@@ -1315,7 +1293,6 @@ html, body {
     gap: 15px;
   }
   
-  .photos-content,
   .identity-content,
   .manifesto-content {
     padding: 20px;
