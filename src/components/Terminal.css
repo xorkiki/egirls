@@ -634,7 +634,6 @@ html, body {
   user-select: none;
   filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6));
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  border: 2px solid red; /* Debug: red border to see image containers */
 }
 
 .collage-image:hover,
@@ -765,7 +764,6 @@ html, body {
   height: calc(100vh - 200px);
   position: relative;
   overflow: visible;
-  background: rgba(255, 0, 0, 0.1); /* Debug: red tint to see the container */
 }
 
 .identity-footer {

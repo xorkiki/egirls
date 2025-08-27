@@ -281,13 +281,14 @@ const DigitalCollage = () => {
       let posX, posY;
       
       if (isMobile) {
-        // Mobile: Force distribution across entire screen width
+        // Mobile: Better centered distribution across entire screen width
         const sectionWidth = availableWidth / 4; // Divide screen into 4 sections
         const section = index % 4;
         const sectionX = padding + (section * sectionWidth);
         
-        // Random position within each section
-        posX = sectionX + (Math.random() * (sectionWidth - imageWidth));
+        // Center images within each section with some randomness
+        const centerOffset = (sectionWidth - imageWidth) / 2;
+        posX = sectionX + centerOffset + (Math.random() - 0.5) * (sectionWidth * 0.3);
         posY = headerHeight + padding + (Math.random() * (availableHeight - imageHeight));
         
         // Ensure we don't go outside bounds
