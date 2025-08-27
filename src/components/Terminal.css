@@ -1,3 +1,14 @@
+/* Prevent mobile zoom and scaling issues */
+html, body {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 .terminal {
   position: fixed;
   top: 0;
