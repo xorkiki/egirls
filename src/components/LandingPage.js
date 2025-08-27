@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Terminal from './Terminal_new';
+import Terminal from './Terminal';
 import './LandingPage.css';
 
 const LandingPage = () => {
