@@ -1156,9 +1156,9 @@ const Terminal = ({ onClose }) => {
                 style={{
                   position: 'absolute',
                   left: `${promptWidth + inputWidth + 2}px`,
-                  top: '0',
+                  top: window.innerWidth <= 768 ? '2px' : '0',
                   // Mobile-specific adjustments
-                  transform: window.innerWidth <= 768 ? 'translateY(-2px)' : 'none'
+                  transform: window.innerWidth <= 768 ? 'translateY(0)' : 'none'
                 }}
               ></span>
             )}

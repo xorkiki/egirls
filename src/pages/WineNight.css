@@ -242,6 +242,16 @@
   .photo-timeline-container {
     height: calc(100vh - 120px); /* Reduce height to make room for text */
   }
+
+  /* Terminal button mobile styles */
+  .terminal-button {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .close-icon {
+    font-size: 13px;
+  }
 }
 
 /* Very narrow screens (like 412px width) */
