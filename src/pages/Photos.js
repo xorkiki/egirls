@@ -162,9 +162,27 @@ const Photos = ({ onClose, onNavigateToWineNight, onNavigateToTattoos }) => {
     const maxY = viewportHeight - folderHeight - footerHeight - 20; // 20px margin from bottom
     const minY = headerHeight + 20; // 20px margin below header
     
+    const finalX = Math.max(20, Math.min(maxX, randomX));
+    const finalY = Math.max(minY, Math.min(maxY, randomY));
+    
+    // Debug: Log the positioning
+    console.log('Folder positioning:', {
+      viewportWidth,
+      viewportHeight,
+      availableHeight,
+      randomX,
+      randomY,
+      finalX,
+      finalY,
+      minX: 20,
+      maxX,
+      minY,
+      maxY
+    });
+    
     return {
-      x: Math.max(20, Math.min(maxX, randomX)), // 20px margin from left edge
-      y: Math.max(minY, Math.min(maxY, randomY))
+      x: finalX,
+      y: finalY
     };
   };
 
@@ -189,10 +207,24 @@ const Photos = ({ onClose, onNavigateToWineNight, onNavigateToTattoos }) => {
   };
 
   // Use state to store positions and update them when viewport changes
-  const [folderPositions, setFolderPositions] = React.useState(() => ({
-    wineNight: getRandomCenteredPosition(),
-    tattoos: getRandomCenteredPosition()
-  }));
+  const [folderPositions, setFolderPositions] = React.useState(() => {
+    // Set default positions first to ensure folders are visible
+    const defaultPositions = {
+      wineNight: { x: 100, y: 100 },
+      tattoos: { x: 300, y: 100 }
+    };
+    
+    // Then try to get random positions
+    try {
+      return {
+        wineNight: getRandomCenteredPosition(),
+        tattoos: getRandomCenteredPosition()
+      };
+    } catch (error) {
+      console.error('Error getting random positions, using defaults:', error);
+      return defaultPositions;
+    }
+  });
 
   // Update positions when viewport changes (orientation change, resize, etc.)
   React.useEffect(() => {

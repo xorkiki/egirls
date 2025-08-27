@@ -76,9 +76,7 @@
 }
 
 .photos-content {
-  position: absolute;
-  left: 0;
-  right: 0;
+  position: relative;
   width: 100%;
   height: calc(100vh - 44px - 80px); /* Full viewport minus header (44px) and footer (80px) */
   top: 44px; /* Position below header */
@@ -100,6 +98,9 @@
   -webkit-touch-callout: none;
   touch-action: none;
   z-index: 1;
+  /* Temporary debugging - make folders visible */
+  border: 2px solid red;
+  background-color: rgba(255, 0, 0, 0.1);
 }
 
 .folder-icon {
