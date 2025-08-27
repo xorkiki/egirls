@@ -142,9 +142,9 @@ const Photos = ({ onClose, onNavigateToWineNight, onNavigateToTattoos }) => {
     const footerHeight = 80; // Footer height
     const availableHeight = viewportHeight - headerHeight - footerHeight;
     
-    // Define safe zones (avoiding edges and header/footer)
-    const safeZoneWidth = Math.min(viewportWidth * 0.8, 600); // 80% of viewport or max 600px
-    const safeZoneHeight = Math.min(availableHeight * 0.8, 400); // 80% of available height or max 400px
+    // Use the FULL available space - no artificial constraints
+    const safeZoneWidth = viewportWidth - 40; // Full width minus 20px margins on each side
+    const safeZoneHeight = availableHeight - 40; // Full available height minus 20px margins on each side
     
     // Calculate center offsets within available space
     const centerX = viewportWidth / 2;
@@ -197,14 +197,20 @@ const Photos = ({ onClose, onNavigateToWineNight, onNavigateToTattoos }) => {
   // Update positions when viewport changes (orientation change, resize, etc.)
   React.useEffect(() => {
     const handleResize = () => {
+      // Debug: Log viewport dimensions
+      const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 375;
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 667;
+      console.log('Viewport dimensions:', { viewportWidth, viewportHeight });
+      
       const newPositions = {
         wineNight: getRandomCenteredPosition(),
         tattoos: getRandomCenteredPosition()
       };
       
       // Validate positions are within bounds
-      const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 375;
-      const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 667;
+      const headerHeight = 44;
+      const footerHeight = 80;
+      const availableHeight = viewportHeight - headerHeight - footerHeight;
       
       if (newPositions.wineNight.x < 0 || newPositions.wineNight.x > viewportWidth - 100 ||
           newPositions.wineNight.y < 60 || newPositions.wineNight.y > viewportHeight - 180) {

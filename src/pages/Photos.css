@@ -1,3 +1,10 @@
+/* Global Reset for Photos Page */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 /* Photos Page Styles */
 .photos-page {
   position: fixed;
@@ -69,12 +76,17 @@
 }
 
 .photos-content {
-  position: relative;
-  width: 100vw;
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
   height: calc(100vh - 44px - 80px); /* Full viewport minus header (44px) and footer (80px) */
   top: 44px; /* Position below header */
   overflow: visible; /* Allow folders to be positioned anywhere in this area */
   display: block; /* Remove flex centering to allow absolute positioning */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .draggable-folder {
