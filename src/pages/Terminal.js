@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { motion } from 'framer-motion';
+
 import './Terminal.css';
 
 // Wine Night Photos Array - All 89 Photos in Sequential Order
