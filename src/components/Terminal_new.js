@@ -234,8 +234,27 @@ const DigitalCollage = () => {
       });
     };
 
+    // Handle mobile viewport height changes (address bar show/hide)
+    const handleViewportChange = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+      
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleViewportChange);
+    
+    // Initial viewport height calculation
+    handleViewportChange();
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleViewportChange);
+    };
   }, []);
 
   // Mobile photo stack state
@@ -670,6 +689,16 @@ const Terminal = ({ onClose }) => {
         currentLine += line[j];
         currentOutput[currentOutput.length - 1] = { type: 'output', content: currentLine };
         setOutput([...currentOutput]);
+        
+        // Auto-scroll on mobile during typing
+        if (window.innerWidth <= 768 && outputRef.current) {
+          setTimeout(() => {
+            if (outputRef.current) {
+              outputRef.current.scrollTop = outputRef.current.scrollHeight;
+            }
+          }, 0);
+        }
+        
         await new Promise(resolve => setTimeout(resolve, speed));
       }
 
