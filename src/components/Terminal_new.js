@@ -212,6 +212,7 @@ const DigitalCollage = () => {
     '/brand/WhatsApp Image 2025-06-11 at 14.23.41 (1).jpeg',
     '/brand/WhatsApp Image 2025-06-12 at 23.17.49 (2).jpeg',
     '/brand/WhatsApp Image 2025-06-12 at 23.17.50 (1).jpeg',
+    '/brand/WhatsApp Image 2025-06-12 at 23.17.50 (2).jpeg',
     '/brand/WhatsApp Image 2025-08-20 at 15.04.27.jpeg',
     '/brand/billboard.jpg',
     '/brand/cd-case.jpg',
@@ -400,7 +401,7 @@ const DigitalCollage = () => {
           onMouseLeave={() => setHoveredImage(null)}
         >
           <img
-            src={photo}
+            src={encodeURI(photo)}
             alt={`Brand asset ${index + 1}`}
             draggable="false"
             loading="lazy"
