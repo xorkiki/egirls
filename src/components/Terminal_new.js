@@ -220,11 +220,29 @@ const DigitalCollage = () => {
     '/brand/window-poster.jpg'
   ];
 
+  // Add window resize listener for responsive positioning
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // Responsive image positioning based on screen size
   const imageStyles = useMemo(() => {
-    const isMobile = window.innerWidth <= 768;
-    const isSmallMobile = window.innerWidth <= 480;
-    const isTinyMobile = window.innerWidth <= 360;
+    const isMobile = windowSize.width <= 768;
+    const isSmallMobile = windowSize.width <= 480;
+    const isTinyMobile = windowSize.width <= 360;
     
     // Responsive dimensions
     let imageWidth, imageHeight;
@@ -246,10 +264,10 @@ const DigitalCollage = () => {
     const minSpacing = isMobile ? 30 : 50;
     const headerHeight = 45;
     const footerHeight = 120;
-    const safeHeight = window.innerHeight - headerHeight - footerHeight;
-    const centerX = window.innerWidth / 2;
+    const safeHeight = windowSize.height - headerHeight - footerHeight;
+    const centerX = windowSize.width / 2;
     const centerY = headerHeight + (safeHeight / 2);
-    const availableWidth = window.innerWidth - (padding * 2);
+    const availableWidth = windowSize.width - (padding * 2);
     const availableHeight = safeHeight - (padding * 2);
     
     // Adjust spread factor for mobile
@@ -340,7 +358,7 @@ const DigitalCollage = () => {
         transition: isDragging ? 'none' : 'transform 0.3s ease-out'
       };
     });
-  }, [brandPhotos, dragOffset.x, dragOffset.y, isDragging]);
+  }, [brandPhotos, dragOffset.x, dragOffset.y, isDragging, windowSize]);
 
   // Mouse and touch event handlers
   const handleMouseDown = (e) => {
@@ -409,6 +427,13 @@ const DigitalCollage = () => {
 
     return () => observer.disconnect();
   }, []);
+
+  // Debug logging
+  console.log('DigitalCollage rendering:', {
+    brandPhotosCount: brandPhotos.length,
+    windowSize,
+    imageStyles: imageStyles.length
+  });
 
   return (
     <div
