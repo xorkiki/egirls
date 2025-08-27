@@ -137,13 +137,18 @@ const Photos = ({ onClose, onNavigateToWineNight, onNavigateToTattoos }) => {
     const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 375;
     const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 667;
     
-    // Define safe zones (avoiding edges and header/footer)
-    const safeZoneWidth = Math.min(viewportWidth * 0.5, 400); // 50% of viewport or max 400px
-    const safeZoneHeight = Math.min(viewportHeight * 0.5, 300); // 50% of viewport or max 300px
+    // Account for header and footer areas
+    const headerHeight = 44; // Header height
+    const footerHeight = 80; // Footer height
+    const availableHeight = viewportHeight - headerHeight - footerHeight;
     
-    // Calculate center offsets
+    // Define safe zones (avoiding edges and header/footer)
+    const safeZoneWidth = Math.min(viewportWidth * 0.8, 600); // 80% of viewport or max 600px
+    const safeZoneHeight = Math.min(availableHeight * 0.8, 400); // 80% of available height or max 400px
+    
+    // Calculate center offsets within available space
     const centerX = viewportWidth / 2;
-    const centerY = viewportHeight / 2;
+    const centerY = headerHeight + (availableHeight / 2); // Center within available space
     
     // Generate random positions within safe zones
     const randomX = centerX + (Math.random() - 0.5) * safeZoneWidth;
@@ -152,8 +157,6 @@ const Photos = ({ onClose, onNavigateToWineNight, onNavigateToTattoos }) => {
     // Ensure folders stay within viewport bounds with better margins
     const folderWidth = 80; // Approximate folder width
     const folderHeight = 100; // Approximate folder height
-    const headerHeight = 60; // Approximate header height
-    const footerHeight = 80; // Approximate footer height
     
     const maxX = viewportWidth - folderWidth - 20; // 20px margin from right edge
     const maxY = viewportHeight - folderHeight - footerHeight - 20; // 20px margin from bottom
@@ -170,13 +173,18 @@ const Photos = ({ onClose, onNavigateToWineNight, onNavigateToTattoos }) => {
     const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 375;
     const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 667;
     
-    // Simple grid-based fallback positioning
+    // Account for header and footer areas
+    const headerHeight = 44;
+    const footerHeight = 80;
+    const availableHeight = viewportHeight - headerHeight - footerHeight;
+    
+    // Simple grid-based fallback positioning within available space
     const gridX = index === 0 ? 0.3 : 0.7; // Left or right side
-    const gridY = 0.5; // Middle of screen
+    const gridY = 0.5; // Middle of available space
     
     return {
       x: Math.max(20, Math.min(viewportWidth - 100, viewportWidth * gridX)),
-      y: Math.max(80, Math.min(viewportHeight - 180, viewportHeight * gridY))
+      y: Math.max(headerHeight + 20, Math.min(viewportHeight - footerHeight - 180, headerHeight + (availableHeight * gridY)))
     };
   };
 

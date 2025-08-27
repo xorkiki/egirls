@@ -71,11 +71,10 @@
 .photos-content {
   position: relative;
   width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: calc(100vh - 44px - 80px); /* Full viewport minus header (44px) and footer (80px) */
+  top: 44px; /* Position below header */
+  overflow: visible; /* Allow folders to be positioned anywhere in this area */
+  display: block; /* Remove flex centering to allow absolute positioning */
 }
 
 .draggable-folder {
@@ -208,9 +207,8 @@
   
   /* Ensure folders stay within mobile viewport */
   .photos-content {
-    position: relative;
-    width: 100%;
-    height: calc(100vh - 130px);
-    overflow: hidden;
+    height: calc(100vh - 50px - 80px); /* Adjust for mobile header height */
+    top: 50px; /* Position below mobile header */
+    overflow: visible; /* Allow folders to be positioned anywhere in this area */
   }
 }
