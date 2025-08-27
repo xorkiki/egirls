@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "framer-motion": "^12.23.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1"
@@ -11,7 +12,14 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "optimize-images": "node optimize-images.js",
+    "compare-sizes": "node compare-sizes.js",
+    "replace-images": "node replace-images.js",
+    "optimize-wine-night": "node optimize-wine-night.js",
+    "ultra-compress-wine-night": "node ultra-compress-wine-night.js",
+    "convert-to-webp": "node convert-to-webp.js",
+    "cleanup-photos": "node cleanup-photos.js"
   },
   "eslintConfig": {
     "extends": [
@@ -31,5 +39,10 @@
       "last 1 safari version"
     ]
   },
-
+  "devDependencies": {
+    "imagemin": "^7.0.1",
+    "imagemin-mozjpeg": "^8.0.0",
+    "imagemin-pngquant": "^8.0.0",
+    "imagemin-webp": "^5.1.0"
+  }
 }

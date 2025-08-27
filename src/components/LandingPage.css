@@ -2,7 +2,8 @@
   position: relative;
   width: 100vw;
   height: 200vh;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .background-container {
