@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import './Terminal.css';
 
-// Wine Night Photos Array
+// Wine Night Photos Array - Cleaned and Optimized
 const wineNightPhotos = [
   '/photos/wine-night/egirls june 2025-001.jpg',
   '/photos/wine-night/egirls june 2025-002.jpg',
@@ -39,7 +39,6 @@ const wineNightPhotos = [
   '/photos/wine-night/egirls june 2025-035.jpg',
   '/photos/wine-night/egirls june 2025-036.jpg',
   '/photos/wine-night/egirls june 2025-037.jpg',
-  '/photos/wine-night/egirls june 2025-038.jpg',
   '/photos/wine-night/egirls june 2025-039.jpg',
   '/photos/wine-night/egirls june 2025-040.jpg',
   '/photos/wine-night/egirls june 2025-041.jpg',
@@ -93,8 +92,7 @@ const wineNightPhotos = [
   '/photos/wine-night/egirls june 2025-097.jpg',
   '/photos/wine-night/egirls june 2025-098.jpg',
   '/photos/wine-night/egirls june 2025-100.jpg',
-  '/photos/wine-night/egirls june 2025-101.jpg',
-  '/photos/wine-night/egirls june 2025-102.jpg'
+  '/photos/wine-night/egirls june 2025-101.jpg'
 ];
 
 // Individual Photo Component
@@ -141,7 +139,24 @@ const PhotoItem = ({ photo, index, scrollYProgress }) => {
       viewport={{ once: true, margin: "-10%" }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <img src={photo} alt={`Wine night photo ${index + 1}`} />
+      <img 
+        src={photo} 
+        alt={`Wine night photo ${index + 1}`}
+        loading="lazy"
+        style={{
+          width: '300px',
+          height: '400px',
+          objectFit: 'cover',
+          borderRadius: '8px',
+          opacity: 0,
+          transition: 'opacity 0.3s ease-in'
+        }}
+        onLoad={(e) => { e.target.style.opacity = '1'; }}
+        onError={(e) => { 
+          console.error('Failed to load wine night photo:', photo); 
+          e.target.style.opacity = '0.5'; 
+        }}
+      />
     </motion.div>
   );
 };

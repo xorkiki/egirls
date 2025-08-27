@@ -639,6 +639,23 @@ html, body {
   will-change: opacity;
   backface-visibility: hidden;
   transform: translateZ(0);
+  opacity: 0;
+  transition: opacity 0.3s ease-in;
+}
+
+.collage-image img[data-loaded="true"] {
+  opacity: 1;
+}
+
+.image-placeholder {
+  background: linear-gradient(45deg, #1a1a1a 25%, #2a2a2a 25%, #2a2a2a 50%, #1a1a1a 50%, #1a1a1a 75%, #2a2a2a 75%, #2a2a2a);
+  background-size: 20px 20px;
+  animation: placeholder-shimmer 2s linear infinite;
+}
+
+@keyframes placeholder-shimmer {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 40px; }
 }
 
 /* Custom scrollbar for the collage */

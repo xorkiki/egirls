@@ -15,7 +15,11 @@
     "eject": "react-scripts eject",
     "optimize-images": "node optimize-images.js",
     "compare-sizes": "node compare-sizes.js",
-    "replace-images": "node replace-images.js"
+    "replace-images": "node replace-images.js",
+    "optimize-wine-night": "node optimize-wine-night.js",
+    "ultra-compress-wine-night": "node ultra-compress-wine-night.js",
+    "convert-to-webp": "node convert-to-webp.js",
+    "cleanup-photos": "node cleanup-photos.js"
   },
   "eslintConfig": {
     "extends": [

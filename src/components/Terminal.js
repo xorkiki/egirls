@@ -265,11 +265,21 @@ const PhotoTimeline = () => {
                 <img
                   src={photo}
                   alt={`Wine night photo ${photoIndex + 1} (copy ${arrayIndex + 1})`}
+                  loading="lazy"
                   style={{
                     width: '300px',
                     height: '400px',
                     objectFit: 'cover',
-                    borderRadius: '8px'
+                    borderRadius: '8px',
+                    opacity: 0,
+                    transition: 'opacity 0.3s ease-in'
+                  }}
+                  onLoad={(e) => {
+                    e.target.style.opacity = '1';
+                  }}
+                  onError={(e) => {
+                    console.error('Failed to load wine night photo:', photo);
+                    e.target.style.opacity = '0.5';
                   }}
                 />
               </div>
@@ -382,6 +392,8 @@ const DigitalCollage = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [loadedImages, setLoadedImages] = useState(new Set());
+  const [visibleImages, setVisibleImages] = useState(new Set());
 
   // Define brandPhotos locally to avoid scope issues
   const brandPhotos = [
@@ -575,6 +587,33 @@ const DigitalCollage = () => {
     setIsDragging(false);
   };
 
+  // Intersection Observer for lazy loading
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const imageIndex = parseInt(entry.target.dataset.index);
+            setVisibleImages(prev => new Set([...prev, imageIndex]));
+          }
+        });
+      },
+      {
+        rootMargin: '100px', // Start loading 100px before image is visible
+        threshold: 0.1
+      }
+    );
+
+    // Observe all image containers
+    const imageContainers = containerRef.current?.querySelectorAll('.collage-image');
+    imageContainers?.forEach((container, index) => {
+      container.dataset.index = index;
+      observer.observe(container);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div 
       className="digital-collage-container" 
@@ -596,18 +635,45 @@ const DigitalCollage = () => {
               className={`collage-image ${hoveredImage === index ? 'hovered' : ''}`}
               style={imageStyles[index]}
             >
-              <img 
-                src={photo} 
-                alt={`Brand asset ${index + 1}`}
-                draggable="false"
-                loading="lazy"
-                onMouseEnter={() => setHoveredImage(index)}
-                onMouseLeave={() => setHoveredImage(null)}
-                style={{ 
-                  opacity: 1,
-                  transition: 'opacity 0.3s ease-in'
-                }}
-              />
+              {visibleImages.has(index) ? (
+                <img 
+                  src={photo} 
+                  alt={`Brand asset ${index + 1}`}
+                  draggable="false"
+                  loading="lazy"
+                  onMouseEnter={() => setHoveredImage(index)}
+                  onMouseLeave={() => setHoveredImage(null)}
+                  style={{ 
+                    opacity: loadedImages.has(index) ? 1 : 0,
+                    transition: 'opacity 0.3s ease-in'
+                  }}
+                  onLoad={(e) => {
+                    setLoadedImages(prev => new Set([...prev, index]));
+                    e.target.style.opacity = '1';
+                  }}
+                  onError={(e) => {
+                    console.error('Failed to load image:', photo);
+                    e.target.style.opacity = '0.5';
+                  }}
+                />
+              ) : (
+                <div 
+                  className="image-placeholder"
+                  style={{
+                    width: '400px',
+                    height: '300px',
+                    backgroundColor: '#1a1a1a',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#666',
+                    fontSize: '14px'
+                  }}
+                >
+                  Loading...
+                </div>
+              )}
             </div>
           ))
         ) : (
