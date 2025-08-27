@@ -96,7 +96,7 @@ const wineNightPhotos = [
 ];
 
 // Individual Photo Component
-const PhotoItem = ({ photo, index, scrollYProgress }) => {
+const PhotoItem = ({ photo, index, scrollYProgress, isActive }) => {
   // Randomized scale curves for each image
   const maxScale = 1.0 + Math.random() * 0.2; // 1.0 to 1.2
   const minScale = 0.4 + Math.random() * 0.2; // 0.4 to 0.6
@@ -164,13 +164,48 @@ const PhotoItem = ({ photo, index, scrollYProgress }) => {
 // Photo Timeline Component
 const PhotoTimeline = () => {
   const containerRef = useRef(null);
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
   });
 
+  // Handle wheel events for both vertical and horizontal scrolling
+  const handleWheel = (e) => {
+    e.preventDefault();
+    
+    // Determine scroll direction and amount
+    const deltaX = e.deltaX || 0;
+    const deltaY = e.deltaY || 0;
+    
+    // Use the larger delta to determine primary scroll direction
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      // Horizontal scroll
+      if (deltaX > 0) {
+        // Scroll right - next photo
+        setCurrentPhotoIndex(prev => Math.min(prev + 1, wineNightPhotos.length - 1));
+      } else {
+        // Scroll left - previous photo
+        setCurrentPhotoIndex(prev => Math.max(prev - 1, 0));
+      }
+    } else {
+      // Vertical scroll
+      if (deltaY > 0) {
+        // Scroll down - next photo
+        setCurrentPhotoIndex(prev => Math.min(prev + 1, wineNightPhotos.length - 1));
+      } else {
+        // Scroll up - previous photo
+        setCurrentPhotoIndex(prev => Math.max(prev - 1, 0));
+      }
+    }
+  };
+
   return (
-    <div className="photo-timeline-container" ref={containerRef}>
+    <div 
+      className="photo-timeline-container" 
+      ref={containerRef}
+      onWheel={handleWheel}
+    >
       <div className="photo-timeline">
         {wineNightPhotos.map((photo, index) => (
           <PhotoItem 
@@ -178,6 +213,7 @@ const PhotoTimeline = () => {
             photo={photo}
             index={index}
             scrollYProgress={scrollYProgress}
+            isActive={index === currentPhotoIndex}
           />
         ))}
       </div>
@@ -520,14 +556,30 @@ const DraggableFolder = ({ name, initialX, initialY, onOpen }) => {
     }
   };
 
-  const handleMouseUp = () => {
-    setIsDragging(false);
+  const handleMouseUp = (e) => {
+    // Check if we actually moved the folder
+    const movedDistance = Math.sqrt(
+      Math.pow(e.clientX - (dragStart.x + position.x), 2) + 
+      Math.pow(e.clientY - (dragStart.y + position.y), 2)
+    );
+    
+    // If moved more than 5px, consider it a drag, not a click
+    if (movedDistance > 5) {
+      setIsDragging(false);
+      // Prevent click event by setting a flag
+      e.target.dataset.wasDragged = 'true';
+    } else {
+      setIsDragging(false);
+    }
   };
 
   const handleClick = (e) => {
-    if (!isDragging) {
+    // Only open folder if it wasn't dragged
+    if (!isDragging && e.target.dataset.wasDragged !== 'true') {
       onOpen(name);
     }
+    // Reset the flag
+    delete e.target.dataset.wasDragged;
   };
 
   useEffect(() => {
