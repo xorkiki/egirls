@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import About from './About';
 import Photos from './Photos';
+import WineNight from './WineNight';
+import Tattoos from './Tattoos';
 
 import './Terminal.css';
 
@@ -997,56 +999,11 @@ const Terminal = ({ onClose }) => {
   }
 
   if (currentPage === 'wine-night') {
-    return (
-      <div className="wine-night-page">
-        <div className="wine-night-header">
-          <div className="terminal-buttons">
-            <div className="terminal-button close" onClick={() => setCurrentPage('photos')}>
-              <span className="close-icon">×</span>
-            </div>
-            <div className="terminal-button minimize"></div>
-            <div className="terminal-button maximize"></div>
-          </div>
-          <div className="terminal-title">wine night</div>
-        </div>
-        <div className="wine-night-content">
-          <PhotoTimeline />
-          <div className="wine-night-thanks">
-            <p>thank you to our friends at aptos for helping us host the egirls wine night</p>
-          </div>
-        </div>
-        <div className="wine-night-footer">
-          <div className="wine-night-logo">
-            <img src="/egirl_logo.svg" alt="egirls logo" />
-          </div>
-        </div>
-      </div>
-    );
+    return <WineNight onClose={() => setCurrentPage('photos')} />;
   }
 
   if (currentPage === 'tattoos') {
-    return (
-      <div className="tattoos-page">
-        <div className="tattoos-header">
-          <div className="terminal-buttons">
-            <div className="terminal-button close" onClick={() => setCurrentPage('photos')}>
-              <span className="close-icon">×</span>
-            </div>
-            <div className="terminal-button minimize"></div>
-            <div className="terminal-button maximize"></div>
-          </div>
-          <div className="terminal-title">tattoos</div>
-        </div>
-        <div className="tattoos-content">
-          <p>Tattoos page coming soon...</p>
-        </div>
-        <div className="tattoos-footer">
-          <div className="tattoos-logo">
-            <img src="/egirl_logo.svg" alt="egirls logo" />
-          </div>
-        </div>
-      </div>
-    );
+    return <Tattoos onClose={() => setCurrentPage('photos')} />;
   }
 
   if (currentPage === 'identity') {
