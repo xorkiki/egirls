@@ -94,32 +94,27 @@ const wineNightPhotos = [
   '/photos/wine-night/egirls june 2025-101.jpg'
 ];
 
-// Photo Timeline Component - Simple Carousel
+// Simple Photo Timeline Component
 const PhotoTimeline = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [translateX, setTranslateX] = useState(0);
   
-  // Handle wheel scroll - smooth continuous movement (INFINITE)
+  // Simple wheel scroll
   const handleWheel = (e) => {
     e.preventDefault();
     const delta = e.deltaY;
-    
-    // Convert wheel delta to smooth translation movement
-    const sensitivity = 0.5; // Adjust this for scroll sensitivity
+    const sensitivity = 0.5;
     const newTranslateX = translateX + (delta * sensitivity);
-    
-    // INFINITE CAROUSEL - No bounds, just wrap around
     setTranslateX(newTranslateX);
     
-    // Update current index based on position (with wrapping)
     const newIndex = Math.round(-newTranslateX / 250);
     const wrappedIndex = ((newIndex % wineNightPhotos.length) + wineNightPhotos.length) % wineNightPhotos.length;
     setCurrentIndex(wrappedIndex);
   };
   
-  // Handle mouse drag
+  // Simple mouse drag
   const handleMouseDown = (e) => {
     setIsDragging(true);
     setStartX(e.clientX - translateX);
@@ -127,99 +122,39 @@ const PhotoTimeline = () => {
   
   const handleMouseMove = (e) => {
     if (!isDragging) return;
-    
-    // Use requestAnimationFrame for smooth dragging
-    requestAnimationFrame(() => {
-      const newTranslateX = e.clientX - startX;
-      setTranslateX(newTranslateX);
-    });
+    const newTranslateX = e.clientX - startX;
+    setTranslateX(newTranslateX);
   };
   
   const handleMouseUp = () => {
     setIsDragging(false);
-    
-    // Snap to nearest photo (INFINITE - with wrapping)
-    const photoWidth = 250; // Width of each photo (updated to match new spacing)
+    const photoWidth = 250;
     const snappedIndex = Math.round(-translateX / photoWidth);
     const wrappedIndex = ((snappedIndex % wineNightPhotos.length) + wineNightPhotos.length) % wineNightPhotos.length;
-    
     setCurrentIndex(wrappedIndex);
     setTranslateX(-wrappedIndex * photoWidth);
   };
 
-  // Handle touch events for mobile swiping
-  const handleTouchStart = (e) => {
-    if (e.touches.length === 1) {
-      setIsDragging(true);
-      setStartX(e.touches[0].clientX - translateX);
-    }
-  };
-  
-  const handleTouchMove = (e) => {
-    if (!isDragging || e.touches.length !== 1) return;
-    
-    e.preventDefault(); // Prevent default scrolling
-    
-    // Use requestAnimationFrame for smooth touch dragging
-    requestAnimationFrame(() => {
-      const newTranslateX = e.touches[0].clientX - startX;
-      setTranslateX(newTranslateX);
-    });
-  };
-  
-  const handleTouchEnd = () => {
-    setIsDragging(false);
-    
-    // Snap to nearest photo (INFINITE - with wrapping)
-    const photoWidth = 250; // Width of each photo (updated to match new spacing)
-    const snappedIndex = Math.round(-translateX / photoWidth);
-    const wrappedIndex = ((snappedIndex % snappedIndex) + wineNightPhotos.length) % wineNightPhotos.length;
-    
-    setCurrentIndex(wrappedIndex);
-    setTranslateX(-wrappedIndex * photoWidth);
-  };
-  
-  // Calculate positions for all photos (INFINITE)
+  // Calculate photo positions
   const getPhotoStyle = (index) => {
-    // INFINITE CAROUSEL - Create a continuous loop of photos
-    // We need to create multiple copies of the photo array to fill the infinite space
-    
-    // Calculate how many full arrays we need to display
-    const totalPhotos = wineNightPhotos.length;
     const photoSpacing = 250;
-    
-    // Create a virtual infinite array by repeating the photos
-    // Each photo appears every totalPhotos * photoSpacing pixels
-    const virtualIndex = index % totalPhotos;
-    const arrayOffset = Math.floor(index / totalPhotos);
-    
-    // Position photos in a continuous line
     const baseX = index * photoSpacing;
     const currentX = baseX + translateX;
-    
-    // The center of the screen is at 0 since we're using left: 50% and marginLeft: -150px
     const centerX = 0;
     const distanceFromCenter = Math.abs(currentX - centerX);
     
-    // Smooth continuous scaling based on distance from center
-    let scale = 0.4; // Smaller base scale for edge photos
-    
+    let scale = 0.4;
     if (distanceFromCenter <= 400) {
-      // Smooth interpolation between min and max scale
       const scaleRatio = 1 - (distanceFromCenter / 400);
-      scale = 0.4 + (0.8 * scaleRatio); // Smoothly from 0.4 to 1.2
+      scale = 0.4 + (0.8 * scaleRatio);
     }
     
-    // Add vertical staggering - alternate between slightly up and down
-    const verticalOffset = (virtualIndex % 2 === 0) ? 30 : -20; // Stagger vertically
-    
-    // No random jitter - completely predictable positioning
-    const horizontalJitter = 0;
+    const verticalOffset = (index % 2 === 0) ? 30 : -20;
     
     return {
-      transform: `translateX(${currentX + horizontalJitter}px) translateY(${verticalOffset}px) scale(${scale})`,
+      transform: `translateX(${currentX}px) translateY(${verticalOffset}px) scale(${scale})`,
       zIndex: Math.floor(scale * 100),
-      opacity: 0.4 + (0.6 * (scale - 0.4) / 0.8) // Smooth opacity transition too
+      opacity: 0.4 + (0.6 * (scale - 0.4) / 0.8)
     };
   };
 
@@ -231,17 +166,11 @@ const PhotoTimeline = () => {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
       style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
     >
       <div className="photo-timeline">
-        {/* Create balanced infinite carousel - works in both directions */}
         {Array.from({ length: 10 }, (_, arrayIndex) => 
           wineNightPhotos.map((photo, photoIndex) => {
-            // Create a balanced array: 5 copies to the left, 5 copies to the right
-            // This ensures infinite scrolling works in both directions
             const globalIndex = (arrayIndex - 5) * wineNightPhotos.length + photoIndex;
             return (
               <div
@@ -259,7 +188,7 @@ const PhotoTimeline = () => {
               >
                 <img
                   src={photo}
-                  alt={`Wine night photo ${photoIndex + 1} (copy ${arrayIndex + 1})`}
+                  alt={`Wine night photo ${photoIndex + 1}`}
                   loading="lazy"
                   style={{
                     width: '300px',
