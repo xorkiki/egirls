@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import About from './About';
+import Photos from './Photos';
 
 import './Terminal.css';
 
@@ -987,27 +988,11 @@ const Terminal = ({ onClose }) => {
 
   if (currentPage === 'photos') {
     return (
-      <div className="photos-page">
-        <div className="photos-header">
-          <div className="terminal-buttons">
-            <div className="terminal-button close" onClick={() => setCurrentPage('terminal')}>
-              <span className="close-icon">×</span>
-            </div>
-            <div className="terminal-button minimize"></div>
-            <div className="terminal-button maximize"></div>
-          </div>
-          <div className="terminal-title">photos</div>
-        </div>
-        <div className="photos-content">
-          <DraggableFolder name="wine night" initialX={150} initialY={100} onOpen={(name) => setCurrentPage('wine-night')} />
-          <DraggableFolder name="tattoos" initialX={300} initialY={200} onOpen={(name) => setCurrentPage('tattoos')} />
-        </div>
-        <div className="photos-footer">
-          <div className="photos-logo">
-            <img src="/egirl_logo.svg" alt="egirls logo" />
-          </div>
-        </div>
-      </div>
+      <Photos 
+        onClose={() => setCurrentPage('terminal')}
+        onNavigateToWineNight={() => setCurrentPage('wine-night')}
+        onNavigateToTattoos={() => setCurrentPage('tattoos')}
+      />
     );
   }
 
