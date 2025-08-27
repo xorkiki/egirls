@@ -132,7 +132,7 @@ const DraggableFolder = ({ name, initialX, initialY, onOpen }) => {
 
 const Photos = ({ onClose, onNavigateToWineNight, onNavigateToTattoos }) => {
   // Generate random but centered positions for folders with better viewport handling
-  const getRandomCenteredPosition = () => {
+  const getRandomCenteredPosition = (folderIndex) => {
     // Get current viewport dimensions with fallbacks
     const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 375;
     const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 667;
@@ -142,17 +142,22 @@ const Photos = ({ onClose, onNavigateToWineNight, onNavigateToTattoos }) => {
     const footerHeight = 80; // Footer height
     const availableHeight = viewportHeight - headerHeight - footerHeight;
     
-    // Use more conservative positioning to ensure folders are visible
-    const safeZoneWidth = Math.min(viewportWidth * 0.7, 800); // 70% of viewport or max 800px
-    const safeZoneHeight = Math.min(availableHeight * 0.7, 500); // 70% of available height or max 500px
+    // Use the full viewport width for better distribution
+    const safeZoneWidth = viewportWidth - 100; // Full width minus margins
+    const safeZoneHeight = availableHeight - 100; // Full height minus margins
     
-    // Calculate center offsets within available space
-    const centerX = viewportWidth / 2;
-    const centerY = headerHeight + (availableHeight / 2); // Center within available space
+    // Distribute folders across the full width to prevent stacking
+    let baseX;
+    if (folderIndex === 0) {
+      // First folder: left side
+      baseX = 100 + (Math.random() * 0.3 * safeZoneWidth);
+    } else {
+      // Second folder: right side
+      baseX = 100 + (0.7 * safeZoneWidth) + (Math.random() * 0.3 * safeZoneWidth);
+    }
     
-    // Generate random positions within safe zones
-    const randomX = centerX + (Math.random() - 0.5) * safeZoneWidth;
-    const randomY = centerY + (Math.random() - 0.5) * safeZoneHeight;
+    // Random Y position within available height
+    const randomY = headerHeight + 100 + (Math.random() * (safeZoneHeight - 100));
     
     // Ensure folders stay within viewport bounds with better margins
     const folderWidth = 80; // Approximate folder width
@@ -163,15 +168,15 @@ const Photos = ({ onClose, onNavigateToWineNight, onNavigateToTattoos }) => {
     const minY = headerHeight + 50; // 50px margin below header
     const minX = 50; // 50px margin from left edge
     
-    const finalX = Math.max(minX, Math.min(maxX, randomX));
+    const finalX = Math.max(minX, Math.min(maxX, baseX));
     const finalY = Math.max(minY, Math.min(maxY, randomY));
     
     // Debug: Log the positioning
-    console.log('Folder positioning:', {
+    console.log(`Folder ${folderIndex} positioning:`, {
       viewportWidth,
       viewportHeight,
       availableHeight,
-      randomX,
+      baseX,
       randomY,
       finalX,
       finalY,
@@ -218,8 +223,8 @@ const Photos = ({ onClose, onNavigateToWineNight, onNavigateToTattoos }) => {
     // Then try to get random positions
     try {
       return {
-        wineNight: getRandomCenteredPosition(),
-        tattoos: getRandomCenteredPosition()
+        wineNight: getRandomCenteredPosition(0), // Left side
+        tattoos: getRandomCenteredPosition(1)    // Right side
       };
     } catch (error) {
       console.error('Error getting random positions, using defaults:', error);
@@ -235,10 +240,10 @@ const Photos = ({ onClose, onNavigateToWineNight, onNavigateToTattoos }) => {
       const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 667;
       console.log('Viewport dimensions:', { viewportWidth, viewportHeight });
       
-      const newPositions = {
-        wineNight: getRandomCenteredPosition(),
-        tattoos: getRandomCenteredPosition()
-      };
+                      const newPositions = {
+                  wineNight: getRandomCenteredPosition(0), // Left side
+                  tattoos: getRandomCenteredPosition(1)    // Right side
+                };
       
       // Validate positions are within bounds
       const headerHeight = 44;
