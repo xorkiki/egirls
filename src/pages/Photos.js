@@ -142,9 +142,9 @@ const Photos = ({ onClose, onNavigateToWineNight, onNavigateToTattoos }) => {
     const footerHeight = 80; // Footer height
     const availableHeight = viewportHeight - headerHeight - footerHeight;
     
-    // Use the FULL available space - no artificial constraints
-    const safeZoneWidth = viewportWidth - 40; // Full width minus 20px margins on each side
-    const safeZoneHeight = availableHeight - 40; // Full available height minus 20px margins on each side
+    // Use more conservative positioning to ensure folders are visible
+    const safeZoneWidth = Math.min(viewportWidth * 0.7, 800); // 70% of viewport or max 800px
+    const safeZoneHeight = Math.min(availableHeight * 0.7, 500); // 70% of available height or max 500px
     
     // Calculate center offsets within available space
     const centerX = viewportWidth / 2;
@@ -158,11 +158,12 @@ const Photos = ({ onClose, onNavigateToWineNight, onNavigateToTattoos }) => {
     const folderWidth = 80; // Approximate folder width
     const folderHeight = 100; // Approximate folder height
     
-    const maxX = viewportWidth - folderWidth - 20; // 20px margin from right edge
-    const maxY = viewportHeight - folderHeight - footerHeight - 20; // 20px margin from bottom
-    const minY = headerHeight + 20; // 20px margin below header
+    const maxX = viewportWidth - folderWidth - 50; // 50px margin from right edge
+    const maxY = viewportHeight - folderHeight - footerHeight - 50; // 50px margin from bottom
+    const minY = headerHeight + 50; // 50px margin below header
+    const minX = 50; // 50px margin from left edge
     
-    const finalX = Math.max(20, Math.min(maxX, randomX));
+    const finalX = Math.max(minX, Math.min(maxX, randomX));
     const finalY = Math.max(minY, Math.min(maxY, randomY));
     
     // Debug: Log the positioning
@@ -174,7 +175,7 @@ const Photos = ({ onClose, onNavigateToWineNight, onNavigateToTattoos }) => {
       randomY,
       finalX,
       finalY,
-      minX: 20,
+      minX,
       maxX,
       minY,
       maxY
