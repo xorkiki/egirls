@@ -193,7 +193,6 @@ const DigitalCollage = () => {
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [loadedImages, setLoadedImages] = useState(new Set());
-  const [visibleImages, setVisibleImages] = useState(new Set());
 
   // Brand photos array
   const brandPhotos = [
@@ -370,28 +369,7 @@ const DigitalCollage = () => {
     setIsDragging(false);
   };
 
-  // Intersection Observer for lazy loading
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const imageIndex = parseInt(entry.target.dataset.index);
-            setVisibleImages(prev => new Set([...prev, imageIndex]));
-          }
-        });
-      },
-      { rootMargin: '100px', threshold: 0.1 }
-    );
-
-    const imageContainers = containerRef.current?.querySelectorAll('.collage-image');
-    imageContainers?.forEach((container, index) => {
-      container.dataset.index = index;
-      observer.observe(container);
-    });
-
-    return () => observer.disconnect();
-  }, []);
+  // Remove Intersection Observer since we're loading all images immediately
 
   // Debug logging
   console.log('DigitalCollage rendering:', {
@@ -421,45 +399,31 @@ const DigitalCollage = () => {
           onMouseEnter={() => setHoveredImage(index)}
           onMouseLeave={() => setHoveredImage(null)}
         >
-          {visibleImages.has(index) ? (
-            <img
-              src={photo}
-              alt={`Brand asset ${index + 1}`}
-              draggable="false"
-              loading="lazy"
-              onMouseEnter={() => setHoveredImage(index)}
-              onMouseLeave={() => setHoveredImage(null)}
-              style={{
-                opacity: loadedImages.has(index) ? 1 : 0,
-                transition: 'opacity 0.3s ease-in'
-              }}
-              onLoad={(e) => {
-                setLoadedImages(prev => new Set([...prev, index]));
-                e.target.style.opacity = '1';
-              }}
-              onError={(e) => {
-                console.error('Failed to load image:', photo);
-                e.target.style.opacity = '0.5';
-              }}
-            />
-          ) : (
-            <div
-              className="image-placeholder"
-              style={{
-                width: '100%',
-                height: '100%',
-                backgroundColor: '#1a1a1a',
-                borderRadius: '8px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#666',
-                fontSize: '14px'
-              }}
-            >
-              Loading...
-            </div>
-          )}
+          <img
+            src={photo}
+            alt={`Brand asset ${index + 1}`}
+            draggable="false"
+            loading="lazy"
+            onMouseEnter={() => setHoveredImage(index)}
+            onMouseLeave={() => setHoveredImage(null)}
+            style={{
+              opacity: loadedImages.has(index) ? 1 : 0,
+              transition: 'opacity 0.3s ease-in',
+              width: '100%',
+              height: '100%',
+              objectFit: 'contain'
+            }}
+            onLoad={(e) => {
+              console.log(`Image ${index} loaded successfully:`, photo);
+              setLoadedImages(prev => new Set([...prev, index]));
+              e.target.style.opacity = '1';
+            }}
+            onError={(e) => {
+              console.error(`Failed to load image ${index}:`, photo);
+              e.target.style.opacity = '0.5';
+              e.target.style.border = '2px solid red';
+            }}
+          />
         </div>
       ))}
     </div>
