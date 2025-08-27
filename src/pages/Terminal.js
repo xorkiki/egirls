@@ -771,6 +771,20 @@ const Terminal = ({ onClose }) => {
     'cat manifesto.txt'
   ];
 
+  // Add ESC key functionality to close the terminal and return to landing page
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose]);
+
   useEffect(() => {
     // Add initial terminal output - only the login message, no prompt
     const isSmallScreen = window.innerWidth <= 412;

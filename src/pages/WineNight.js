@@ -245,6 +245,20 @@ const PhotoTimeline = () => {
 };
 
 const WineNight = ({ onClose }) => {
+  // Add ESC key functionality to close the page
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose]);
+
   return (
     <div className="wine-night-page">
       <div className="wine-night-header">

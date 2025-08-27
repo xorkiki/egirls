@@ -131,6 +131,20 @@ const DraggableFolder = ({ name, initialX, initialY, onOpen }) => {
 };
 
 const Photos = ({ onClose, onNavigateToWineNight, onNavigateToTattoos }) => {
+  // Add ESC key functionality to close the page
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose]);
+
   // Generate random but centered positions for folders with better viewport handling
   const getRandomCenteredPosition = (folderIndex) => {
     // Get current viewport dimensions with fallbacks

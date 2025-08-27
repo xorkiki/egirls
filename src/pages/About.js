@@ -2,6 +2,20 @@ import React from 'react';
 import './About.css';
 
 const About = ({ onClose }) => {
+  // Add ESC key functionality to close the page
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose]);
+
   return (
     <div className="about-page">
       <div className="about-header">
