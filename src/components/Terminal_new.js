@@ -238,6 +238,11 @@ const DigitalCollage = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Mobile photo stack state
+  const [photoStack, setPhotoStack] = useState([...brandPhotos]);
+  const [swipeStart, setSwipeStart] = useState({ x: 0, y: 0 });
+  const [isSwiping, setIsSwiping] = useState(false);
+
   // Responsive image positioning based on screen size
   const imageStyles = useMemo(() => {
     const isMobile = windowSize.width <= 768;
@@ -277,19 +282,21 @@ const DigitalCollage = () => {
       padding
     });
     
-    return brandPhotos.map((_, index) => {
+    return photoStack.map((_, index) => {
       let posX, posY;
       
       if (isMobile) {
-        // Mobile: Better centered distribution across entire screen width
-        const sectionWidth = availableWidth / 4; // Divide screen into 4 sections
-        const section = index % 4;
-        const sectionX = padding + (section * sectionWidth);
+        // Mobile: Stack photos on top of each other with slight offsets
+        const centerX = windowSize.width / 2;
+        const centerY = headerHeight + (safeHeight / 2);
         
-        // Center images within each section with some randomness
-        const centerOffset = (sectionWidth - imageWidth) / 2;
-        posX = sectionX + centerOffset + (Math.random() - 0.5) * (sectionWidth * 0.3);
-        posY = headerHeight + padding + (Math.random() * (availableHeight - imageHeight));
+        // Create a stacked effect with slight random offsets
+        const stackOffset = index * 2; // Small offset for each layer
+        const randomOffsetX = (Math.random() - 0.5) * 40; // Random horizontal offset
+        const randomOffsetY = (Math.random() - 0.5) * 40; // Random vertical offset
+        
+        posX = centerX - (imageWidth / 2) + randomOffsetX + stackOffset;
+        posY = centerY - (imageHeight / 2) + randomOffsetY + stackOffset;
         
         // Ensure we don't go outside bounds
         posX = Math.max(padding, Math.min(windowSize.width - imageWidth - padding, posX));
@@ -311,7 +318,7 @@ const DigitalCollage = () => {
       
       // Debug logging for first few images
       if (index < 5) {
-        console.log(`Image ${index}: posX=${posX}, posY=${posY}, isMobile=${isMobile}, section=${index % 4}`);
+        console.log(`Image ${index}: posX=${posX}, posY=${posY}, isMobile=${isMobile}, stackIndex=${index}`);
       }
       
       return {
@@ -324,7 +331,7 @@ const DigitalCollage = () => {
         transition: isDragging ? 'none' : 'transform 0.3s ease-out'
       };
     });
-  }, [brandPhotos, dragOffset.x, dragOffset.y, isDragging, windowSize]);
+  }, [photoStack, dragOffset.x, dragOffset.y, isDragging, windowSize]);
 
   // Mouse and touch event handlers
   const handleMouseDown = (e) => {
@@ -349,25 +356,63 @@ const DigitalCollage = () => {
 
   const handleTouchStart = (e) => {
     if (e.touches.length === 1) {
+      const touch = e.touches[0];
+      setSwipeStart({ x: touch.clientX, y: touch.clientY });
+      setIsSwiping(true);
+      
+      // For dragging functionality
       setIsDragging(true);
       setDragStart({
-        x: e.touches[0].clientX - dragOffset.x,
-        y: e.touches[0].clientY - dragOffset.y
+        x: touch.clientX - dragOffset.x,
+        y: touch.clientY - dragOffset.y
       });
     }
   };
 
   const handleTouchMove = (e) => {
-    if (isDragging && e.touches.length === 1) {
-      e.preventDefault();
-      setDragOffset({
-        x: e.touches[0].clientX - dragStart.x,
-        y: e.touches[0].clientY - dragStart.y
-      });
+    if (e.touches.length === 1) {
+      const touch = e.touches[0];
+      
+      if (isDragging) {
+        e.preventDefault();
+        setDragOffset({
+          x: touch.clientX - dragStart.x,
+          y: touch.clientY - dragStart.y
+        });
+      }
     }
   };
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (e) => {
+    if (isSwiping && windowSize.width <= 768) {
+      const touch = e.changedTouches[0];
+      const deltaX = touch.clientX - swipeStart.x;
+      const deltaY = touch.clientY - swipeStart.y;
+      
+      // Check if it's a horizontal swipe (more horizontal than vertical)
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+        // Swipe left or right - cycle through photos
+        if (deltaX > 0) {
+          // Swipe right - move first photo to back
+          setPhotoStack(prev => {
+            const newStack = [...prev];
+            const firstPhoto = newStack.shift();
+            newStack.push(firstPhoto);
+            return newStack;
+          });
+        } else {
+          // Swipe left - move last photo to front
+          setPhotoStack(prev => {
+            const newStack = [...prev];
+            const lastPhoto = newStack.pop();
+            newStack.unshift(lastPhoto);
+            return newStack;
+          });
+        }
+      }
+    }
+    
+    setIsSwiping(false);
     setIsDragging(false);
   };
 
@@ -396,7 +441,7 @@ const DigitalCollage = () => {
       {brandPhotos.map((photo, index) => (
         <div
           key={index}
-          className={`collage-image ${hoveredImage === index ? 'hovered' : ''}`}
+          className={`collage-image ${hoveredImage === index ? 'hovered' : ''} ${index === 0 ? 'top-photo' : ''}`}
           style={imageStyles[index]}
           onMouseEnter={() => setHoveredImage(index)}
           onMouseLeave={() => setHoveredImage(null)}

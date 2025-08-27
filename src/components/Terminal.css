@@ -650,6 +650,12 @@ html, body {
   z-index: 2000 !important;
 }
 
+/* Highlight the top photo in the stack */
+.collage-image.top-photo {
+  filter: drop-shadow(0 8px 16px rgba(0, 255, 0, 0.3)) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6));
+  border: 2px solid rgba(0, 255, 0, 0.5);
+}
+
 /* Mobile hover scaling - less aggressive on small screens */
 @media (max-width: 768px) {
   .collage-image:hover,
