@@ -1123,19 +1123,19 @@ const Terminal = ({ onClose }) => {
     
     // Extra small mobile devices (iPhone SE, small Android)
     if (width <= 375) {
-      return pixelRatio >= 2 ? '-1px' : '0px';
+      return pixelRatio >= 2 ? '0px' : '0px';
     }
     // Small mobile devices
     if (width <= 414) {
-      return pixelRatio >= 2 ? '0px' : '1px';
+      return pixelRatio >= 2 ? '0px' : '0px';
     }
     // Medium mobile devices
     if (width <= 768) {
-      return pixelRatio >= 2 ? '1px' : '2px';
+      return pixelRatio >= 2 ? '0px' : '0px';
     }
     // Large mobile devices and tablets
     if (width <= 1024) {
-      return pixelRatio >= 2 ? '0px' : '1px';
+      return pixelRatio >= 2 ? '0px' : '0px';
     }
     // Desktop
     return '0px';
@@ -1145,23 +1145,7 @@ const Terminal = ({ onClose }) => {
     const width = window.innerWidth;
     const pixelRatio = window.devicePixelRatio || 1;
     
-    // Extra small mobile devices
-    if (width <= 375) {
-      return pixelRatio >= 2 ? 'translateY(1px)' : 'translateY(2px)';
-    }
-    // Small mobile devices
-    if (width <= 414) {
-      return pixelRatio >= 2 ? 'translateY(2px)' : 'translateY(3px)';
-    }
-    // Medium mobile devices
-    if (width <= 768) {
-      return pixelRatio >= 2 ? 'translateY(3px)' : 'translateY(4px)';
-    }
-    // Large mobile devices and tablets
-    if (width <= 1024) {
-      return pixelRatio >= 2 ? 'translateY(2px)' : 'translateY(3px)';
-    }
-    // Desktop
+    // All devices - no transform needed for baseline alignment
     return 'none';
   };
 
@@ -1222,24 +1206,24 @@ const Terminal = ({ onClose }) => {
       const fontSize = parseFloat(computedStyle.fontSize);
       const width = window.innerWidth;
       
-      // Calculate baseline adjustment based on actual text metrics
+      // For baseline alignment, we want minimal adjustment
       let baselineAdjustment = 0;
       
       if (width <= 768) { // Mobile devices
-        // Adjust based on line height vs font size ratio
+        // Only make tiny adjustments if absolutely necessary for baseline alignment
         const lineHeightRatio = lineHeight / fontSize;
-        if (lineHeightRatio > 1.4) {
-          baselineAdjustment = 2; // Move cursor down to center with text
-        } else if (lineHeightRatio > 1.2) {
-          baselineAdjustment = 1; // Move cursor down slightly
+        if (lineHeightRatio > 1.5) {
+          baselineAdjustment = 0; // Keep at baseline
+        } else if (lineHeightRatio > 1.3) {
+          baselineAdjustment = 0; // Keep at baseline
         } else {
-          baselineAdjustment = 0;
+          baselineAdjustment = 0; // Keep at baseline
         }
       }
       
       return {
         top: baselineAdjustment,
-        transform: baselineAdjustment !== 0 ? `translateY(${baselineAdjustment}px)` : 'none'
+        transform: 'none' // No transform for baseline alignment
       };
     } catch (error) {
       // Fallback to static positioning if there's an error
