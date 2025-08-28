@@ -539,7 +539,7 @@ html, body {
 /* Mobile optimizations for digital collage */
 @media (max-width: 768px) {
   .digital-collage-container {
-    touch-action: pan-x pan-y;
+    touch-action: pan-x; /* Only allow horizontal swiping, prevent vertical scrolling */
     overflow: hidden;
   }
   
@@ -572,6 +572,9 @@ html, body {
     -webkit-backface-visibility: hidden;
     transform-style: preserve-3d;
     -webkit-transform-style: preserve-3d;
+    /* Faster, more responsive transitions like Instagram/TikTok */
+    transition: all 0.25s cubic-bezier(0.4, 0.0, 0.2, 1) !important;
+    -webkit-transition: all 0.25s cubic-bezier(0.4, 0.0, 0.2, 1) !important;
   }
   
   /* Center the photo stack container on mobile */
@@ -653,6 +656,9 @@ html, body {
     -webkit-backface-visibility: hidden;
     transform-style: preserve-3d;
     -webkit-transform-style: preserve-3d;
+    /* Faster, more responsive transitions like Instagram/TikTok */
+    transition: all 0.25s cubic-bezier(0.4, 0.0, 0.2, 1) !important;
+    -webkit-transition: all 0.25s cubic-bezier(0.4, 0.0, 0.2, 1) !important;
   }
   
   /* Ensure centering on very small screens too */

@@ -405,6 +405,7 @@ const DigitalCollage = () => {
   const [touchStartX, setTouchStartX] = useState(0);
   const [touchEndX, setTouchEndX] = useState(0);
   const [touchStartTime, setTouchStartTime] = useState(0);
+  const [swipeVelocity, setSwipeVelocity] = useState(0);
 
   // Define brandPhotos locally to avoid scope issues
   const brandPhotos = [
@@ -453,8 +454,8 @@ const DigitalCollage = () => {
 
 
 
-  const handleSwipe = (threshold = 25) => {
-    const swipeThreshold = threshold; // Use dynamic threshold or default to 25
+  const handleSwipe = (threshold = 15) => {
+    const swipeThreshold = threshold; // Reduced default threshold for more sensitivity
     const diff = touchStartX - touchEndX;
     
     if (Math.abs(diff) > swipeThreshold) {
@@ -512,7 +513,7 @@ const DigitalCollage = () => {
           transform: `translate(-50%, -50%) ${transform}`,
           zIndex,
           opacity,
-          transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+          transition: 'all 0.25s cubic-bezier(0.4, 0.0, 0.2, 1)',
           width: '300px',
           height: '225px'
         };
@@ -679,9 +680,19 @@ const DigitalCollage = () => {
       // Mobile: prevent default scrolling for swipe gestures
       e.preventDefault();
       
-      // Update touch position for real-time swipe detection
+      // Update touch position for real-time swipe detection with momentum
       if (e.touches.length === 1) {
-        setTouchEndX(e.touches[0].clientX);
+        const currentX = e.touches[0].clientX;
+        setTouchEndX(currentX);
+        
+        // Calculate swipe velocity in real-time for better responsiveness
+        const currentTime = Date.now();
+        const timeDiff = currentTime - touchStartTime;
+        if (timeDiff > 0) {
+          const velocity = Math.abs(currentX - touchStartX) / timeDiff;
+          // Store velocity for potential momentum-based detection
+          setSwipeVelocity(velocity);
+        }
       }
       return;
     }
@@ -700,13 +711,34 @@ const DigitalCollage = () => {
   
   const handleTouchEnd = (e) => {
     if (isMobile && e.changedTouches.length === 1) {
-      // Mobile: handle swipe with velocity detection
+      // Mobile: handle swipe with enhanced velocity detection
       setTouchEndX(e.changedTouches[0].clientX);
       const touchEndTime = Date.now();
       const touchDuration = touchEndTime - touchStartTime;
       
-      // If it's a quick swipe (less than 300ms), use lower threshold
-      const dynamicThreshold = touchDuration < 300 ? 15 : 25;
+      // Much more sensitive velocity detection like Instagram/TikTok
+      let dynamicThreshold;
+      if (touchDuration < 150) {
+        // Very fast flick - extremely sensitive
+        dynamicThreshold = 8;
+      } else if (touchDuration < 250) {
+        // Fast swipe - very sensitive
+        dynamicThreshold = 12;
+      } else if (touchDuration < 400) {
+        // Medium swipe - moderately sensitive
+        dynamicThreshold = 18;
+      } else {
+        // Slow swipe - standard sensitivity
+        dynamicThreshold = 25;
+      }
+      
+      // Additional velocity-based threshold reduction for high-speed gestures
+      if (swipeVelocity > 2.0) { // High velocity threshold
+        dynamicThreshold = Math.max(5, dynamicThreshold - 8); // Reduce threshold for fast gestures
+      } else if (swipeVelocity > 1.0) { // Medium velocity threshold
+        dynamicThreshold = Math.max(6, dynamicThreshold - 5); // Reduce threshold for medium gestures
+      }
+      
       handleSwipe(dynamicThreshold);
     } else if (!isMobile) {
       // Desktop: end drag
