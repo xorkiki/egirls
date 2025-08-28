@@ -771,14 +771,33 @@ const Terminal = ({ onClose }) => {
     'cat manifesto.txt'
   ];
 
-  // Add ESC key functionality to close the terminal and return to landing page
-  // Only active when on the main terminal page, not on sub-pages
+  // Add ESC key functionality for all pages
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && currentPage === 'terminal') {
+      if (e.key === 'Escape') {
         e.preventDefault();
         e.stopPropagation();
-        onClose();
+        
+        // Handle ESC key for different pages
+        switch (currentPage) {
+          case 'terminal':
+            onClose(); // Return to landing page
+            break;
+          case 'about':
+          case 'photos':
+          case 'identity':
+          case 'transmissions':
+          case 'manifesto':
+            setCurrentPage('terminal'); // Return to terminal page
+            break;
+          case 'wine-night':
+          case 'tattoos':
+            setCurrentPage('photos'); // Return to photos page
+            break;
+          default:
+            // Fallback to terminal page
+            setCurrentPage('terminal');
+        }
       }
     };
 
@@ -1040,22 +1059,6 @@ const Terminal = ({ onClose }) => {
   }
 
   if (currentPage === 'identity') {
-    // Add ESC key functionality for identity page
-    React.useEffect(() => {
-      const handleKeyDown = (e) => {
-        if (e.key === 'Escape') {
-          e.preventDefault();
-          e.stopPropagation();
-          setCurrentPage('terminal');
-        }
-      };
-
-      document.addEventListener('keydown', handleKeyDown, true); // Use capture phase
-      return () => {
-        document.removeEventListener('keydown', handleKeyDown, true);
-      };
-    }, []);
-
     return (
       <div className="identity-page">
         <div className="identity-header">
@@ -1083,22 +1086,6 @@ const Terminal = ({ onClose }) => {
   }
 
   if (currentPage === 'transmissions') {
-    // Add ESC key functionality for transmissions page
-    React.useEffect(() => {
-      const handleKeyDown = (e) => {
-        if (e.key === 'Escape') {
-          e.preventDefault();
-          e.stopPropagation();
-          setCurrentPage('terminal');
-        }
-      };
-
-      document.addEventListener('keydown', handleKeyDown, true); // Use capture phase
-      return () => {
-        document.removeEventListener('keydown', handleKeyDown, true);
-      };
-    }, []);
-
     return (
       <div className="transmissions-page">
         <div className="transmissions-header">
@@ -1119,22 +1106,6 @@ const Terminal = ({ onClose }) => {
   }
 
   if (currentPage === 'manifesto') {
-    // Add ESC key functionality for manifesto page
-    React.useEffect(() => {
-      const handleKeyDown = (e) => {
-        if (e.key === 'Escape') {
-          e.preventDefault();
-          e.stopPropagation();
-          setCurrentPage('terminal');
-        }
-      };
-
-      document.addEventListener('keydown', handleKeyDown, true); // Use capture phase
-      return () => {
-        document.removeEventListener('keydown', handleKeyDown, true);
-      };
-    }, []);
-
     return (
       <div className="manifesto-page">
         <div className="manifesto-header">
@@ -1148,11 +1119,13 @@ const Terminal = ({ onClose }) => {
           <div className="terminal-title">manifesto</div>
         </div>
         <div className="manifesto-content">
-          {manifestos.map((line, index) => (
-            <div key={index} className="manifesto-line">
-              {line}
-            </div>
-          ))}
+          {manifestos.map((line, index) => {
+            return (
+              <div key={index} className="manifesto-line">
+                {line}
+              </div>
+            );
+          })}
         </div>
         <div className="manifesto-footer">
           <div className="manifesto-logo">
