@@ -23,11 +23,12 @@
   border-bottom: 1px solid #333;
 }
 
-.wine-night-header .terminal-buttons {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
+  .wine-night-header .terminal-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-shrink: 0;
+  }
 
 .wine-night-header .terminal-button {
   width: 12px;
@@ -231,18 +232,31 @@
 }
 
 /* Mobile Responsive Styles */
-@media (max-width: 768px) {
+@media (max-width: 768px) and (min-width: 451px) {
   .wine-night-header {
-    padding: 10px 15px;
-    min-height: 40px;
+    padding: 8px 12px;
+    min-height: 36px;
     justify-content: space-between;
     flex-direction: row;
     align-items: center;
     gap: 0;
+    position: relative;
+  }
+  
+  .wine-night-header .terminal-buttons {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    order: 1;
   }
   
   .wine-night-header .terminal-title {
-    font-size: 12px;
+    font-size: 11px;
+    order: 2;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
   }
   
   /* Wine Night mobile improvements */
@@ -264,17 +278,80 @@
 
   /* Terminal button mobile styles */
   .terminal-button {
-    width: 11px;
-    height: 11px;
+    width: 10px;
+    height: 10px;
+    flex-shrink: 0;
   }
   
   .close-icon {
-    font-size: 8px;
+    font-size: 7px;
+  }
+}
+
+/* Medium mobile devices (451px - 768px) */
+@media (min-width: 451px) and (max-width: 768px) {
+  .wine-night-header {
+    padding: 8px 12px;
+    min-height: 36px;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    gap: 0;
+    position: relative;
+  }
+  
+  .wine-night-header .terminal-buttons {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    order: 1;
+  }
+  
+  .wine-night-header .terminal-title {
+    font-size: 11px;
+    order: 2;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+
+  /* Terminal button mobile styles */
+  .terminal-button {
+    width: 10px;
+    height: 10px;
+    flex-shrink: 0;
+  }
+  
+  .close-icon {
+    font-size: 7px;
   }
 }
 
 /* Very narrow screens (like 412px width) */
 @media (max-width: 450px) {
+  .wine-night-header {
+    padding: 6px 10px;
+    min-height: 32px;
+  }
+  
+  .wine-night-header .terminal-buttons {
+    gap: 5px;
+  }
+  
+  .wine-night-header .terminal-title {
+    font-size: 10px;
+  }
+  
+  .terminal-button {
+    width: 9px;
+    height: 9px;
+  }
+  
+  .close-icon {
+    font-size: 6px;
+  }
+  
   .wine-night-thanks {
     top: 50px; /* Move text up to avoid photo overlap */
     font-size: 13px; /* Even smaller font */
