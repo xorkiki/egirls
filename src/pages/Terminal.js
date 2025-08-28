@@ -492,11 +492,14 @@ const DigitalCollage = () => {
           zIndex = 1000 - stackOffset;
           opacity = 0.8 - (stackOffset * 0.2);
           const rotation = (Math.random() - 0.5) * 20; // Slight random rotation
-          const offsetX = (Math.random() - 0.5) * 40; // Random horizontal offset
-          const offsetY = (Math.random() - 0.5) * 30; // Random vertical offset
+          // Constrain offsets to prevent photos from going outside container bounds
+          const maxOffsetX = 30; // Reduced from 40 to keep photos within bounds
+          const maxOffsetY = 20; // Reduced from 30 to keep photos within bounds
+          const offsetX = (Math.random() - 0.5) * maxOffsetX;
+          const offsetY = (Math.random() - 0.5) * maxOffsetY;
           transform = `rotate(${rotation}deg) translate(${offsetX}px, ${offsetY}px)`;
-          left = `calc(50% + ${offsetX}px)`;
-          top = `calc(50% + ${offsetY}px)`;
+          left = '50%';
+          top = '50%';
         } else {
           // Hidden photos
           zIndex = 0;

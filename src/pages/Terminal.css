@@ -534,6 +534,10 @@ html, body {
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
+  /* Ensure no unexpected spacing affects layout */
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
 }
 
 /* Mobile optimizations for digital collage */
@@ -550,11 +554,9 @@ html, body {
     object-fit: cover;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-    /* Ensure photos are centered within their container */
-    position: absolute !important;
-    left: 50% !important;
-    top: 50% !important;
-    transform: translate(-50%, -50%) !important;
+    /* Let JavaScript handle positioning, but ensure proper sizing */
+    position: absolute;
+    /* Remove conflicting CSS positioning that overrides JavaScript */
   }
   
   /* Ensure smooth transitions for mobile stack */
@@ -590,6 +592,10 @@ html, body {
     right: 0 !important;
     top: 0 !important;
     bottom: 0 !important;
+    /* Ensure container has proper bounds for photo containment */
+    width: 100vw !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
   }
   
   /* Ensure collage content is centered */
@@ -607,6 +613,10 @@ html, body {
     left: 50% !important;
     top: 50% !important;
     transform: translate(-50%, -50%) !important;
+    /* Ensure content container has proper bounds */
+    box-sizing: border-box !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
   }
   
   /* Ensure identity footer is perfectly centered on mobile */
@@ -642,11 +652,9 @@ html, body {
   .collage-image {
     width: 250px !important;
     height: 188px !important;
-    /* Ensure photos are centered within their container */
-    position: absolute !important;
-    left: 50% !important;
-    top: 50% !important;
-    transform: translate(-50%, -50%) !important;
+    /* Let JavaScript handle positioning, but ensure proper sizing */
+    position: absolute;
+    /* Remove conflicting CSS positioning that overrides JavaScript */
   }
   
   /* Optimize transitions for very small screens too */
@@ -674,6 +682,10 @@ html, body {
     right: 0 !important;
     top: 0 !important;
     bottom: 0 !important;
+    /* Ensure container has proper bounds for photo containment */
+    width: 100vw !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
   }
   
   .collage-content {
@@ -690,6 +702,10 @@ html, body {
     left: 50% !important;
     top: 50% !important;
     transform: translate(-50%, -50%) !important;
+    /* Ensure content container has proper bounds */
+    box-sizing: border-box !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
   }
   
   /* Ensure identity footer is perfectly centered on very small screens too */
