@@ -1123,15 +1123,15 @@ const Terminal = ({ onClose }) => {
     
     // Extra small mobile devices (iPhone SE, small Android)
     if (width <= 375) {
-      return pixelRatio >= 2 ? '0px' : '1px';
+      return pixelRatio >= 2 ? '-1px' : '0px';
     }
     // Small mobile devices
     if (width <= 414) {
-      return pixelRatio >= 2 ? '1px' : '2px';
+      return pixelRatio >= 2 ? '0px' : '1px';
     }
     // Medium mobile devices
     if (width <= 768) {
-      return pixelRatio >= 2 ? '2px' : '3px';
+      return pixelRatio >= 2 ? '1px' : '2px';
     }
     // Large mobile devices and tablets
     if (width <= 1024) {
@@ -1147,19 +1147,19 @@ const Terminal = ({ onClose }) => {
     
     // Extra small mobile devices
     if (width <= 375) {
-      return pixelRatio >= 2 ? 'translateY(0px)' : 'translateY(1px)';
+      return pixelRatio >= 2 ? 'translateY(1px)' : 'translateY(2px)';
     }
     // Small mobile devices
     if (width <= 414) {
-      return pixelRatio >= 2 ? 'translateY(-1px)' : 'translateY(0px)';
+      return pixelRatio >= 2 ? 'translateY(2px)' : 'translateY(3px)';
     }
     // Medium mobile devices
     if (width <= 768) {
-      return pixelRatio >= 2 ? 'translateY(-2px)' : 'translateY(-1px)';
+      return pixelRatio >= 2 ? 'translateY(3px)' : 'translateY(4px)';
     }
     // Large mobile devices and tablets
     if (width <= 1024) {
-      return pixelRatio >= 2 ? 'translateY(-1px)' : 'translateY(0px)';
+      return pixelRatio >= 2 ? 'translateY(2px)' : 'translateY(3px)';
     }
     // Desktop
     return 'none';
@@ -1229,9 +1229,9 @@ const Terminal = ({ onClose }) => {
         // Adjust based on line height vs font size ratio
         const lineHeightRatio = lineHeight / fontSize;
         if (lineHeightRatio > 1.4) {
-          baselineAdjustment = -2;
+          baselineAdjustment = 2; // Move cursor down to center with text
         } else if (lineHeightRatio > 1.2) {
-          baselineAdjustment = -1;
+          baselineAdjustment = 1; // Move cursor down slightly
         } else {
           baselineAdjustment = 0;
         }
