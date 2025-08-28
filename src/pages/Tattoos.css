@@ -79,6 +79,7 @@
   margin: 0;
   font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
   letter-spacing: 0.5px;
+  margin-left: auto; /* Push title to the right side */
 }
 
 .tattoos-content {
@@ -189,11 +190,9 @@
   .tattoos-header .terminal-title {
     font-size: 11px;
     order: 2;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    margin-left: auto; /* Keep title on the right side */
     white-space: nowrap;
-    font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
+    font-family: 'Courier New', 'Monaco', monospace;
     letter-spacing: 0.5px;
   }
 
@@ -231,11 +230,9 @@
   .tattoos-header .terminal-title {
     font-size: 11px;
     order: 2;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    margin-left: auto; /* Keep title on the right side */
     white-space: nowrap;
-    font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
+    font-family: 'Courier New', 'Monaco', monospace;
     letter-spacing: 0.5px;
   }
 
