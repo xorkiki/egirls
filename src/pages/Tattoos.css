@@ -15,26 +15,30 @@
 .tattoos-header {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 20px;
-  padding: 10px 18px;
+  justify-content: space-between;
+  padding: 12px 20px;
   background-color: #1a1a1a;
   position: relative;
   min-height: 44px;
+  border-bottom: 1px solid #333;
 }
 
 .tattoos-header .terminal-buttons {
   display: flex;
-  gap: 9px;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .tattoos-header .terminal-button {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   cursor: pointer;
   position: relative;
   transition: all 0.2s ease;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .tattoos-header .terminal-button.close {
@@ -43,10 +47,21 @@
 
 .tattoos-header .terminal-button.close:hover {
   background-color: #ff4444;
+  transform: scale(1.05);
 }
 
 .tattoos-header .terminal-button.close:hover .close-icon {
   opacity: 1;
+}
+
+.tattoos-header .terminal-button.minimize:hover {
+  background-color: #e6a825;
+  transform: scale(1.05);
+}
+
+.tattoos-header .terminal-button.maximize:hover {
+  background-color: #22a334;
+  transform: scale(1.05);
 }
 
 .tattoos-header .terminal-button.minimize {
@@ -62,10 +77,8 @@
   color: #fff;
   font-weight: bold;
   margin: 0;
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
+  font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
+  letter-spacing: 0.5px;
 }
 
 .tattoos-content {
@@ -99,10 +112,170 @@
   align-items: center;
 }
 
+/* Terminal Button Styles */
+.terminal-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.terminal-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.terminal-button.close {
+  background-color: #ff5f56;
+}
+
+.terminal-button.close:hover {
+  background-color: #ff4444;
+}
+
+.terminal-button.close:hover .close-icon {
+  opacity: 1;
+}
+
+.close-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #000;
+  font-size: 10px;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  line-height: 1;
+  font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
+}
+
+.terminal-button.minimize {
+  background-color: #ffbd2e;
+}
+
+.terminal-button.maximize {
+  background-color: #27ca3f;
+}
+
 .tattoos-logo img {
   height: 50px;
   width: auto;
   filter: brightness(0) invert(1);
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .tattoos-header {
+    padding: 8px 12px;
+    min-height: 36px;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    gap: 0;
+    position: relative;
+  }
+  
+  .tattoos-header .terminal-buttons {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    order: 1;
+  }
+  
+  .tattoos-header .terminal-title {
+    font-size: 11px;
+    order: 2;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  /* Terminal button mobile styles */
+  .terminal-button {
+    width: 10px;
+    height: 10px;
+    flex-shrink: 0;
+  }
+  
+  .close-icon {
+    font-size: 7px;
+  }
+}
+
+/* Medium mobile devices (451px - 768px) */
+@media (min-width: 451px) and (max-width: 768px) {
+  .tattoos-header {
+    padding: 8px 12px;
+    min-height: 36px;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    gap: 0;
+    position: relative;
+  }
+  
+  .tattoos-header .terminal-buttons {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    order: 1;
+  }
+  
+  .tattoos-header .terminal-title {
+    font-size: 11px;
+    order: 2;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  /* Terminal button mobile styles */
+  .terminal-button {
+    width: 10px;
+    height: 10px;
+    flex-shrink: 0;
+  }
+  
+  .close-icon {
+    font-size: 7px;
+  }
+}
+
+/* Very narrow screens (like 412px width) */
+@media (max-width: 450px) {
+  .tattoos-header {
+    padding: 6px 10px;
+    min-height: 32px;
+  }
+  
+  .tattoos-header .terminal-buttons {
+    gap: 5px;
+  }
+  
+  .tattoos-header .terminal-title {
+    font-size: 10px;
+    font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
+    letter-spacing: 0.5px;
+  }
+  
+  .terminal-button {
+    width: 9px;
+    height: 9px;
+  }
+  
+  .close-icon {
+    font-size: 6px;
+  }
 }
 
 /* Terminal Button Styles */
