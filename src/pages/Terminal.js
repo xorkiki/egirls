@@ -1,68 +1,10 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import About from './About';
 import Photos from './Photos';
 import WineNight from './WineNight';
 import Tattoos from './Tattoos';
 
 import './Terminal.css';
-
-// Custom hook for mobile detection and cursor positioning
-const useMobileCursorPosition = () => {
-  const [isMobile, setIsMobile] = useState(false);
-  const [isSmallMobile, setIsSmallMobile] = useState(false);
-  const [isLandscape, setIsLandscape] = useState(false);
-
-  useEffect(() => {
-    const checkDevice = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      
-      setIsMobile(width <= 768);
-      setIsSmallMobile(width <= 450);
-      setIsLandscape(width > height);
-    };
-
-    checkDevice();
-    window.addEventListener('resize', checkDevice);
-    window.addEventListener('orientationchange', checkDevice);
-
-    return () => {
-      window.removeEventListener('resize', checkDevice);
-      window.removeEventListener('orientationchange', checkDevice);
-    };
-  }, []);
-
-  const getCursorStyles = useCallback(() => {
-    if (!isMobile) {
-      return {
-        top: '0',
-        transform: 'none',
-        height: '16px',
-        width: '8px'
-      };
-    }
-
-    // Mobile-specific cursor positioning
-    if (isSmallMobile) {
-      return {
-        top: '-2px',
-        transform: 'translateY(3px)',
-        height: '12px',
-        width: '6px'
-      };
-    }
-
-    // Regular mobile
-    return {
-      top: '-1px',
-      transform: 'translateY(2px)',
-      height: '14px',
-      width: '7px'
-    };
-  }, [isMobile, isSmallMobile]);
-
-  return { isMobile, isSmallMobile, isLandscape, getCursorStyles };
-};
 
 // Wine Night Photos Array - All 89 Photos in Sequential Order
 const wineNightPhotos = [
@@ -759,9 +701,6 @@ const Terminal = ({ onClose }) => {
   const inputRef = useRef(null);
   const outputRef = useRef(null);
   const promptRef = useRef(null);
-  
-  // Use custom hook for mobile cursor positioning
-  const { isMobile, isSmallMobile, isLandscape, getCursorStyles } = useMobileCursorPosition();
 
   const commands = {
     'help': 'Available commands:\n• cd about/ - Navigate to about page\n• cd photos/ - Navigate to photos page\n• cd identity/ - Navigate to identity page\n• cd frequencies/ - Toggle music player (desktop only)\n• cat manifesto.txt - Display manifesto in terminal\n• help - Show this help\n• clear - Clear terminal\n• exit - Return to landing page',
@@ -848,6 +787,22 @@ const Terminal = ({ onClose }) => {
       document.removeEventListener('keydown', handleKeyDown, true);
     };
   }, [onClose, currentPage]);
+
+  // Recalculate cursor positioning on resize and orientation change for mobile devices
+  useEffect(() => {
+    const handleResize = () => {
+      // Force re-render to recalculate cursor position
+      setInputValue(prev => prev);
+    };
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     // Add initial terminal output - only the login message, no prompt
@@ -1160,6 +1115,138 @@ const Terminal = ({ onClose }) => {
     );
   }
 
+  // Cursor positioning helper functions for different mobile devices
+  const getCursorTopPosition = () => {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const pixelRatio = window.devicePixelRatio || 1;
+    
+    // Extra small mobile devices (iPhone SE, small Android)
+    if (width <= 375) {
+      return pixelRatio >= 2 ? '0px' : '1px';
+    }
+    // Small mobile devices
+    if (width <= 414) {
+      return pixelRatio >= 2 ? '1px' : '2px';
+    }
+    // Medium mobile devices
+    if (width <= 768) {
+      return pixelRatio >= 2 ? '2px' : '3px';
+    }
+    // Large mobile devices and tablets
+    if (width <= 1024) {
+      return pixelRatio >= 2 ? '0px' : '1px';
+    }
+    // Desktop
+    return '0px';
+  };
+
+  const getCursorTransform = () => {
+    const width = window.innerWidth;
+    const pixelRatio = window.devicePixelRatio || 1;
+    
+    // Extra small mobile devices
+    if (width <= 375) {
+      return pixelRatio >= 2 ? 'translateY(0px)' : 'translateY(1px)';
+    }
+    // Small mobile devices
+    if (width <= 414) {
+      return pixelRatio >= 2 ? 'translateY(-1px)' : 'translateY(0px)';
+    }
+    // Medium mobile devices
+    if (width <= 768) {
+      return pixelRatio >= 2 ? 'translateY(-2px)' : 'translateY(-1px)';
+    }
+    // Large mobile devices and tablets
+    if (width <= 1024) {
+      return pixelRatio >= 2 ? 'translateY(-1px)' : 'translateY(0px)';
+    }
+    // Desktop
+    return 'none';
+  };
+
+  const getCursorHeight = () => {
+    const width = window.innerWidth;
+    
+    // Extra small mobile devices
+    if (width <= 375) {
+      return '14px';
+    }
+    // Small mobile devices
+    if (width <= 414) {
+      return '15px';
+    }
+    // Medium mobile devices
+    if (width <= 768) {
+      return '16px';
+    }
+    // Large mobile devices and tablets
+    if (width <= 1024) {
+      return '16px';
+    }
+    // Desktop
+    return '16px';
+  };
+
+  const getCursorWidth = () => {
+    const width = window.innerWidth;
+    
+    // Extra small mobile devices
+    if (width <= 375) {
+      return '6px';
+    }
+    // Small mobile devices
+    if (width <= 414) {
+      return '7px';
+    }
+    // Medium mobile devices
+    if (width <= 768) {
+      return '8px';
+    }
+    // Large mobile devices and tablets
+    if (width <= 1024) {
+      return '8px';
+    }
+    // Desktop
+    return '8px';
+  };
+
+  // Dynamic cursor adjustment based on actual text rendering
+  const getDynamicCursorAdjustment = () => {
+    if (!promptRef.current) return { top: 0, transform: 'none' };
+    
+    try {
+      const promptElement = promptRef.current;
+      const computedStyle = window.getComputedStyle(promptElement);
+      const lineHeight = parseFloat(computedStyle.lineHeight);
+      const fontSize = parseFloat(computedStyle.fontSize);
+      const width = window.innerWidth;
+      
+      // Calculate baseline adjustment based on actual text metrics
+      let baselineAdjustment = 0;
+      
+      if (width <= 768) { // Mobile devices
+        // Adjust based on line height vs font size ratio
+        const lineHeightRatio = lineHeight / fontSize;
+        if (lineHeightRatio > 1.4) {
+          baselineAdjustment = -2;
+        } else if (lineHeightRatio > 1.2) {
+          baselineAdjustment = -1;
+        } else {
+          baselineAdjustment = 0;
+        }
+      }
+      
+      return {
+        top: baselineAdjustment,
+        transform: baselineAdjustment !== 0 ? `translateY(${baselineAdjustment}px)` : 'none'
+      };
+    } catch (error) {
+      // Fallback to static positioning if there's an error
+      return { top: 0, transform: 'none' };
+    }
+  };
+
   // Main terminal page
   return (
     <div className="terminal" onClick={handleTerminalClick}>
@@ -1234,7 +1321,10 @@ const Terminal = ({ onClose }) => {
                 style={{
                   position: 'absolute',
                   left: `${promptWidth + inputWidth + 2}px`,
-                  ...getCursorStyles()
+                  top: getDynamicCursorAdjustment().top || getCursorTopPosition(),
+                  transform: getDynamicCursorAdjustment().transform || getCursorTransform(),
+                  height: getCursorHeight(),
+                  width: getCursorWidth()
                 }}
               ></span>
             )}
