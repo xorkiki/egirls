@@ -110,7 +110,7 @@
 }
 
 .wine-night-footer {
-  position: absolute;
+  position: fixed; /* Use fixed positioning to avoid Safari URL bar overlap */
   bottom: 0;
   left: 0;
   right: 0;
@@ -119,6 +119,15 @@
   justify-content: center;
   align-items: center;
   background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+  z-index: 1000; /* Ensure footer appears above other elements */
+}
+
+/* Safari-specific fixes for mobile */
+@supports (-webkit-touch-callout: none) {
+  .wine-night-footer {
+    bottom: env(safe-area-inset-bottom, 0); /* Use safe area for iOS devices */
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0)); /* Add safe area padding */
+  }
 }
 
 .wine-night-logo {
@@ -136,7 +145,7 @@
 /* Photo Timeline Styles - Updated with correct positioning */
 .photo-timeline-container {
   width: 100%;
-  height: 100vh; /* Full viewport height - no scrolling needed */
+  height: calc(100vh - 80px); /* Account for fixed footer height */
   background-color: #000;
   overflow: hidden; /* Hide scrollbars */
   position: relative;
@@ -273,7 +282,7 @@
   }
   
   .photo-timeline-container {
-    height: calc(100vh - 120px); /* Reduce height to make room for text */
+    height: calc(100vh - 120px - 80px); /* Reduce height to make room for text and fixed footer */
   }
 
   /* Terminal button mobile styles */
@@ -373,6 +382,6 @@
   }
   
   .photo-timeline-container {
-    height: calc(100vh - 140px); /* Further reduce height */
+    height: calc(100vh - 140px - 80px); /* Further reduce height to account for fixed footer */
   }
 }
