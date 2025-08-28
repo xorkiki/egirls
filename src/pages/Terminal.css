@@ -560,6 +560,15 @@ html, body {
     border-radius: 8px;
   }
   
+  /* Optimize mobile photo transitions for better swipe responsiveness */
+  .collage-image {
+    will-change: transform, opacity, z-index;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+  }
+  
   /* Center the photo stack container on mobile */
   .digital-collage-container {
     display: flex;
@@ -615,6 +624,15 @@ html, body {
   .collage-image {
     width: 250px !important;
     height: 188px !important;
+  }
+  
+  /* Optimize transitions for very small screens too */
+  .collage-image {
+    will-change: transform, opacity, z-index;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
   }
   
   /* Ensure centering on very small screens too */

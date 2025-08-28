@@ -404,6 +404,7 @@ const DigitalCollage = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [touchStartX, setTouchStartX] = useState(0);
   const [touchEndX, setTouchEndX] = useState(0);
+  const [touchStartTime, setTouchStartTime] = useState(0);
 
   // Define brandPhotos locally to avoid scope issues
   const brandPhotos = [
@@ -452,8 +453,8 @@ const DigitalCollage = () => {
 
 
 
-  const handleSwipe = () => {
-    const swipeThreshold = 50;
+  const handleSwipe = (threshold = 25) => {
+    const swipeThreshold = threshold; // Use dynamic threshold or default to 25
     const diff = touchStartX - touchEndX;
     
     if (Math.abs(diff) > swipeThreshold) {
@@ -660,8 +661,9 @@ const DigitalCollage = () => {
   // Handle touch events for both mobile swiping and desktop dragging
   const handleTouchStart = (e) => {
     if (isMobile && e.touches.length === 1) {
-      // Mobile: handle swipe gestures
+      // Mobile: handle swipe gestures with timestamp for velocity
       setTouchStartX(e.touches[0].clientX);
+      setTouchStartTime(Date.now()); // Add timestamp for velocity detection
     } else if (!isMobile && e.touches.length === 1) {
       // Desktop: handle drag
       setIsDragging(true);
@@ -676,6 +678,11 @@ const DigitalCollage = () => {
     if (isMobile) {
       // Mobile: prevent default scrolling for swipe gestures
       e.preventDefault();
+      
+      // Update touch position for real-time swipe detection
+      if (e.touches.length === 1) {
+        setTouchEndX(e.touches[0].clientX);
+      }
       return;
     }
     
@@ -693,9 +700,14 @@ const DigitalCollage = () => {
   
   const handleTouchEnd = (e) => {
     if (isMobile && e.changedTouches.length === 1) {
-      // Mobile: handle swipe
+      // Mobile: handle swipe with velocity detection
       setTouchEndX(e.changedTouches[0].clientX);
-      handleSwipe();
+      const touchEndTime = Date.now();
+      const touchDuration = touchEndTime - touchStartTime;
+      
+      // If it's a quick swipe (less than 300ms), use lower threshold
+      const dynamicThreshold = touchDuration < 300 ? 15 : 25;
+      handleSwipe(dynamicThreshold);
     } else if (!isMobile) {
       // Desktop: end drag
       setIsDragging(false);
