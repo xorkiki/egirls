@@ -15,7 +15,7 @@
 .wine-night-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start; /* Keep buttons on left */
   padding: 12px 20px;
   background-color: #1a1a1a;
   position: relative;
@@ -79,6 +79,7 @@
   margin: 0;
   font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
   letter-spacing: 0.5px;
+  margin-left: auto; /* Push title to right side */
 }
 
 .wine-night-content {
@@ -236,7 +237,7 @@
   .wine-night-header {
     padding: 8px 12px;
     min-height: 36px;
-    justify-content: space-between;
+    justify-content: flex-start; /* Keep buttons on left */
     flex-direction: row;
     align-items: center;
     gap: 0;
@@ -248,15 +249,15 @@
     gap: 6px;
     align-items: center;
     order: 1;
+    flex-shrink: 0; /* Prevent buttons from shrinking */
   }
   
   .wine-night-header .terminal-title {
     font-size: 11px;
     order: 2;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    margin-left: auto; /* Push title to right side */
     white-space: nowrap;
+    flex-shrink: 0; /* Prevent title from shrinking */
   }
   
   /* Wine Night mobile improvements */
@@ -293,7 +294,7 @@
   .wine-night-header {
     padding: 8px 12px;
     min-height: 36px;
-    justify-content: space-between;
+    justify-content: flex-start; /* Keep buttons on left */
     flex-direction: row;
     align-items: center;
     gap: 0;
@@ -305,17 +306,17 @@
     gap: 6px;
     align-items: center;
     order: 1;
+    flex-shrink: 0; /* Prevent buttons from shrinking */
   }
   
   .wine-night-header .terminal-title {
     font-size: 11px;
     order: 2;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    margin-left: auto; /* Push title to right side */
     white-space: nowrap;
     font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
     letter-spacing: 0.5px;
+    flex-shrink: 0; /* Prevent title from shrinking */
   }
 
   /* Terminal button mobile styles */
@@ -335,16 +336,20 @@
   .wine-night-header {
     padding: 6px 10px;
     min-height: 32px;
+    justify-content: flex-start; /* Keep buttons on left */
   }
   
   .wine-night-header .terminal-buttons {
     gap: 5px;
+    flex-shrink: 0; /* Prevent buttons from shrinking */
   }
   
   .wine-night-header .terminal-title {
     font-size: 10px;
     font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
     letter-spacing: 0.5px;
+    margin-left: auto; /* Push title to right side */
+    flex-shrink: 0; /* Prevent title from shrinking */
   }
   
   .terminal-button {

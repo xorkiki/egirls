@@ -15,7 +15,7 @@
 .tattoos-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start; /* Keep buttons on left */
   padding: 12px 20px;
   background-color: #1a1a1a;
   position: relative;
