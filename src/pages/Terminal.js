@@ -398,6 +398,12 @@ const DigitalCollage = () => {
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [loadedImages, setLoadedImages] = useState(new Set());
   const [visibleImages, setVisibleImages] = useState(new Set());
+  
+  // Mobile stack state
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [touchStartX, setTouchStartX] = useState(0);
+  const [touchEndX, setTouchEndX] = useState(0);
 
   // Define brandPhotos locally to avoid scope issues
   const brandPhotos = [
@@ -424,12 +430,99 @@ const DigitalCollage = () => {
     '/brand/window-poster.jpg'
   ];
 
+  // Check if mobile and set up mobile detection
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Mobile photo stack functions
+  const nextPhoto = () => {
+    setCurrentPhotoIndex((prev) => (prev + 1) % brandPhotos.length);
+  };
+
+  const previousPhoto = () => {
+    setCurrentPhotoIndex((prev) => (prev - 1 + brandPhotos.length) % brandPhotos.length);
+  };
+
+
+
+  const handleSwipe = () => {
+    const swipeThreshold = 50;
+    const diff = touchStartX - touchEndX;
+    
+    if (Math.abs(diff) > swipeThreshold) {
+      if (diff > 0) {
+        // Swipe left - next photo
+        nextPhoto();
+      } else {
+        // Swipe right - previous photo
+        previousPhoto();
+      }
+    }
+  };
+
   // Memoize image styles to prevent recalculation on every render
   const imageStyles = useMemo(() => {
-          const imageWidth = 400;
-      const imageHeight = 300;
-      const padding = 25; // Increased padding for more breathing room on sides and bottom
-      const minSpacing = 50; // Minimum spacing between image centers to prevent complete overlap
+    if (isMobile) {
+      // Mobile stack layout
+      return brandPhotos.map((_, index) => {
+        const isTopPhoto = index === currentPhotoIndex;
+        const stackOffset = (index - currentPhotoIndex + brandPhotos.length) % brandPhotos.length;
+        
+        // Calculate stack position
+        let zIndex, opacity, transform, left, top;
+        
+        if (isTopPhoto) {
+          // Top photo - fully visible, centered
+          zIndex = 1000;
+          opacity = 1;
+          transform = 'rotate(0deg)';
+          left = '50%';
+          top = '50%';
+        } else if (stackOffset <= 3) {
+          // Next few photos - peek out from behind with slight offset
+          zIndex = 1000 - stackOffset;
+          opacity = 0.8 - (stackOffset * 0.2);
+          const rotation = (Math.random() - 0.5) * 20; // Slight random rotation
+          const offsetX = (Math.random() - 0.5) * 40; // Random horizontal offset
+          const offsetY = (Math.random() - 0.5) * 30; // Random vertical offset
+          transform = `rotate(${rotation}deg) translate(${offsetX}px, ${offsetY}px)`;
+          left = `calc(50% + ${offsetX}px)`;
+          top = `calc(50% + ${offsetY}px)`;
+        } else {
+          // Hidden photos
+          zIndex = 0;
+          opacity = 0;
+          transform = 'rotate(0deg)';
+          left = '50%';
+          top = '50%';
+        }
+        
+        return {
+          position: 'absolute',
+          left,
+          top,
+          transform: `translate(-50%, -50%) ${transform}`,
+          zIndex,
+          opacity,
+          transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+          width: '300px',
+          height: '225px'
+        };
+      });
+    }
+    
+    // Desktop collage layout (existing code)
+    const imageWidth = 400;
+    const imageHeight = 300;
+    const padding = 25; // Increased padding for more breathing room on sides and bottom
+    const minSpacing = 50; // Minimum spacing between image centers to prevent complete overlap
     
           // Center the photos in the safe area (between header and footer)
       const headerHeight = 45; // Reduced macOS bar height to eliminate top border
@@ -530,8 +623,8 @@ const DigitalCollage = () => {
               opacity: 1,
               transition: isDragging ? 'none' : 'transform 0.3s ease-out'
             };
-    });
-  }, []);
+          });
+  }, [isMobile, currentPhotoIndex, brandPhotos.length, dragOffset.x, dragOffset.y, isDragging]);
 
 
 
@@ -564,9 +657,13 @@ const DigitalCollage = () => {
     setIsDragging(false);
   };
 
-  // Handle touch events for mobile swiping
+  // Handle touch events for both mobile swiping and desktop dragging
   const handleTouchStart = (e) => {
-    if (e.touches.length === 1) {
+    if (isMobile && e.touches.length === 1) {
+      // Mobile: handle swipe gestures
+      setTouchStartX(e.touches[0].clientX);
+    } else if (!isMobile && e.touches.length === 1) {
+      // Desktop: handle drag
       setIsDragging(true);
       setDragStart({
         x: e.touches[0].clientX - dragOffset.x,
@@ -576,6 +673,13 @@ const DigitalCollage = () => {
   };
   
   const handleTouchMove = (e) => {
+    if (isMobile) {
+      // Mobile: prevent default scrolling for swipe gestures
+      e.preventDefault();
+      return;
+    }
+    
+    // Desktop: handle drag
     if (!isDragging || e.touches.length !== 1) return;
     
     e.preventDefault(); // Prevent default scrolling
@@ -587,8 +691,15 @@ const DigitalCollage = () => {
     });
   };
   
-  const handleTouchEnd = () => {
-    setIsDragging(false);
+  const handleTouchEnd = (e) => {
+    if (isMobile && e.changedTouches.length === 1) {
+      // Mobile: handle swipe
+      setTouchEndX(e.changedTouches[0].clientX);
+      handleSwipe();
+    } else if (!isMobile) {
+      // Desktop: end drag
+      setIsDragging(false);
+    }
   };
 
   // Intersection Observer for lazy loading
