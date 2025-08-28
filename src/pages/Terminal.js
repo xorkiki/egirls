@@ -1040,6 +1040,22 @@ const Terminal = ({ onClose }) => {
   }
 
   if (currentPage === 'identity') {
+    // Add ESC key functionality for identity page
+    React.useEffect(() => {
+      const handleKeyDown = (e) => {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          e.stopPropagation();
+          setCurrentPage('terminal');
+        }
+      };
+
+      document.addEventListener('keydown', handleKeyDown, true); // Use capture phase
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown, true);
+      };
+    }, []);
+
     return (
       <div className="identity-page">
         <div className="identity-header">
@@ -1067,6 +1083,22 @@ const Terminal = ({ onClose }) => {
   }
 
   if (currentPage === 'transmissions') {
+    // Add ESC key functionality for transmissions page
+    React.useEffect(() => {
+      const handleKeyDown = (e) => {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          e.stopPropagation();
+          setCurrentPage('terminal');
+        }
+      };
+
+      document.addEventListener('keydown', handleKeyDown, true); // Use capture phase
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown, true);
+      };
+    }, []);
+
     return (
       <div className="transmissions-page">
         <div className="transmissions-header">
@@ -1087,6 +1119,22 @@ const Terminal = ({ onClose }) => {
   }
 
   if (currentPage === 'manifesto') {
+    // Add ESC key functionality for manifesto page
+    React.useEffect(() => {
+      const handleKeyDown = (e) => {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          e.stopPropagation();
+          setCurrentPage('terminal');
+        }
+      };
+
+      document.addEventListener('keydown', handleKeyDown, true); // Use capture phase
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown, true);
+      };
+    }, []);
+
     return (
       <div className="manifesto-page">
         <div className="manifesto-header">
