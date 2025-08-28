@@ -530,7 +530,7 @@ html, body {
   overflow: visible;
   position: relative;
   background: #000;
-  touch-action: pan-x pan-y;
+  touch-action: pan-x; /* Only allow horizontal swiping, prevent vertical scrolling */
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
@@ -550,6 +550,11 @@ html, body {
     object-fit: cover;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    /* Ensure photos are centered within their container */
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
   }
   
   /* Ensure smooth transitions for mobile stack */
@@ -577,6 +582,11 @@ html, body {
     height: 100%;
     overflow: hidden;
     position: relative;
+    /* Ensure perfect centering */
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
   }
   
   /* Ensure collage content is centered */
@@ -589,6 +599,11 @@ html, body {
     justify-content: center;
     overflow: hidden;
     padding: 0 !important; /* Remove padding on mobile for proper centering */
+    /* Force perfect centering */
+    margin: 0 auto !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
   }
   
   /* Ensure identity footer is perfectly centered on mobile */
@@ -616,7 +631,7 @@ html, body {
 
 @media (max-width: 480px) {
   .digital-collage-container {
-    touch-action: pan-x pan-y;
+    touch-action: pan-x; /* Only allow horizontal swiping, prevent vertical scrolling */
     overflow: hidden;
   }
   
@@ -624,6 +639,11 @@ html, body {
   .collage-image {
     width: 250px !important;
     height: 188px !important;
+    /* Ensure photos are centered within their container */
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
   }
   
   /* Optimize transitions for very small screens too */
@@ -643,6 +663,11 @@ html, body {
     height: 100%;
     overflow: hidden;
     position: relative;
+    /* Ensure perfect centering */
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
   }
   
   .collage-content {
@@ -654,6 +679,11 @@ html, body {
     justify-content: center;
     overflow: hidden;
     padding: 0 !important; /* Remove padding on mobile for proper centering */
+    /* Force perfect centering */
+    margin: 0 auto !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
   }
   
   /* Ensure identity footer is perfectly centered on very small screens too */
@@ -705,6 +735,9 @@ html, body {
   height: 100vh;
   background: #000;
   overflow: hidden;
+  /* Prevent any scrolling on mobile */
+  touch-action: pan-x;
+  -webkit-overflow-scrolling: auto;
 }
 
 .identity-content {
