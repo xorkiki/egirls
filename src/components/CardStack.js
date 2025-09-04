@@ -9,25 +9,24 @@ const CardStack = ({ photos, onSwipeComplete }) => {
 
   // Handle drag end - determine if card should be swiped away
   const handleDragEnd = (event, info) => {
-    const threshold = 100; // Minimum distance to trigger swipe
+    const threshold = 50; // Lower threshold for more sensitivity
     const velocity = info.velocity.x;
     const offset = info.offset.x;
 
-    // Determine if swipe should be triggered based on distance or velocity
-    if (Math.abs(offset) > threshold || Math.abs(velocity) > 500) {
+    // More sensitive swipe detection - lower thresholds
+    if (Math.abs(offset) > threshold || Math.abs(velocity) > 200) {
       const direction = offset > 0 ? 1 : -1; // 1 for right, -1 for left
       setExitX(direction * 1000); // Move card off screen
       setIsAnimating(true);
       
-      // Call completion callback after animation
-      setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % photos.length);
-        setExitX(0);
-        setIsAnimating(false);
-        if (onSwipeComplete) {
-          onSwipeComplete(direction);
-        }
-      }, 300);
+      // Immediate state update - no setTimeout delay
+      setCurrentIndex((prev) => (prev + 1) % photos.length);
+      setExitX(0);
+      setIsAnimating(false);
+      
+      if (onSwipeComplete) {
+        onSwipeComplete(direction);
+      }
     }
   };
 
@@ -110,15 +109,14 @@ const CardStack = ({ photos, onSwipeComplete }) => {
               scale: 0.8
             }}
             transition={{
-              type: "spring",
-              stiffness: 300,
-              damping: 30,
-              duration: 0.3
+              type: "tween",
+              duration: 0.2,
+              ease: "easeOut"
             }}
             drag={card.isTop && !isAnimating}
             dragConstraints={constraintsRef}
-            dragElastic={0.2}
-            dragMomentum={false}
+            dragElastic={0.1}
+            dragMomentum={true}
             onDragEnd={card.isTop ? handleDragEnd : undefined}
             whileDrag={{
               scale: 1.05,
