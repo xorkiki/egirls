@@ -144,8 +144,6 @@
 @media (max-width: 768px) {
   .tattoos-header {
     padding: 8px 14px;
-    width: 412px;
-    height: 40px;
     min-height: 40px;
   }
   
