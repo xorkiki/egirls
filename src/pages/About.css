@@ -186,7 +186,7 @@
 /* Mobile Responsive Styles - exactly matching Terminal page */
 @media (max-width: 768px) {
   .about-header {
-    padding: 15px;
+    padding: 8px 14px;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
