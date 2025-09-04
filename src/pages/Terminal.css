@@ -1309,7 +1309,6 @@ html, body {
   }
   
   .terminal-title {
-    max-width: 150px;
     text-align: center;
     flex: 1;
   }
