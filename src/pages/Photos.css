@@ -73,10 +73,13 @@
   color: #fff !important;
   font-weight: bold !important;
   margin: 0 !important;
+  padding: 0 !important;
   position: static !important;
   right: auto !important;
   top: auto !important;
   transform: none !important;
+  flex: 1 !important;
+  text-align: center !important;
 }
 
 .photos-content {
