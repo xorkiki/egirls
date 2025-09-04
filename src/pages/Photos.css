@@ -23,13 +23,15 @@
 }
 
 .photos-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 14px;
-  background-color: #1a1a1a;
-  position: relative;
-  min-height: 40px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 8px 14px !important;
+  background-color: #1a1a1a !important;
+  position: relative !important;
+  min-height: 40px !important;
+  flex-direction: row !important;
+  gap: 0 !important;
 }
 
 .photos-header .terminal-buttons {
@@ -67,10 +69,14 @@
 }
 
 .photos-header .terminal-title {
-  font-size: 13px;
-  color: #fff;
-  font-weight: bold;
-  margin: 0;
+  font-size: 13px !important;
+  color: #fff !important;
+  font-weight: bold !important;
+  margin: 0 !important;
+  position: static !important;
+  right: auto !important;
+  top: auto !important;
+  transform: none !important;
 }
 
 .photos-content {
