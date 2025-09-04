@@ -298,7 +298,7 @@ const Photos = ({ onClose, onNavigateToWineNight, onNavigateToTattoos }) => {
 
   return (
     <div className="photos-page">
-      <div className="photos-header">
+      <div className="about-header">
         <div className="terminal-buttons">
           <div className="terminal-button close" onClick={onClose}>
             <span className="close-icon">×</span>
