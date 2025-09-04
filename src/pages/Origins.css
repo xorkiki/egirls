@@ -109,6 +109,10 @@
   color: #fff;
   font-weight: bold;
   margin: 0;
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 /* Content styling - exactly matching Terminal page */

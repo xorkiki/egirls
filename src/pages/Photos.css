@@ -214,7 +214,11 @@
 @media (max-width: 768px) {
   
   .terminal-title {
-    font-size: 16px;
+    font-size: 13px;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
   }
   
   .draggable-folder {
