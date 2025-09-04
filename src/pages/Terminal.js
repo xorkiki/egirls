@@ -908,20 +908,21 @@ const Terminal = ({ onClose }) => {
     currentOutput.push({ type: 'system', content: promptText });
     setOutput([...currentOutput]);
     
-    // Type the command
+    // Type the command character by character
     let typedCommand = '';
     for (let i = 0; i < command.length; i++) {
       typedCommand += command[i];
-      currentOutput.push({ type: 'input', content: typedCommand, showCursor: true });
+      // Update the last line (prompt) to show the typing command
+      currentOutput[currentOutput.length - 1] = { type: 'system', content: promptText + typedCommand, showCursor: true };
       setOutput([...currentOutput]);
       await new Promise(resolve => setTimeout(resolve, speed));
     }
     
-    // Remove cursor from command
-    currentOutput[currentOutput.length - 1] = { type: 'input', content: typedCommand, showCursor: false };
+    // Remove cursor from the typed command
+    currentOutput[currentOutput.length - 1] = { type: 'system', content: promptText + typedCommand, showCursor: false };
     setOutput([...currentOutput]);
     
-    // Execute the command
+    // Execute the command (handleCommand will add the proper input line)
     await handleCommand(command);
   };
 
