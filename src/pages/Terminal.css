@@ -90,12 +90,9 @@ html, body {
   font-size: 13px;
   color: #fff;
   -webkit-app-region: no-drag;
-  max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-right: 20px;
-  margin-left: 20px;
   text-align: center;
   flex: 1;
 }
