@@ -90,14 +90,14 @@ const CardStack = ({ photos, onSwipeComplete }) => {
               y: card.offsetY,
               scale: card.scale,
               rotate: card.rotation,
-              opacity: 1
+              opacity: card.isTop ? 1 : 0.6
             }}
             animate={{
               x: card.isTop ? 0 : card.offsetX,
               y: card.isTop ? 0 : card.offsetY,
               scale: card.scale,
               rotate: card.isTop ? 0 : card.rotation,
-              opacity: 1
+              opacity: card.isTop ? 1 : 0.6
             }}
             exit={{
               x: exitX,
@@ -140,28 +140,6 @@ const CardStack = ({ photos, onSwipeComplete }) => {
           </motion.div>
         ))}
       </AnimatePresence>
-      
-      {/* Swipe indicators */}
-      <div className="swipe-indicators" style={{
-        position: 'absolute',
-        top: '20px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        display: 'flex',
-        gap: '10px',
-        zIndex: 1002
-      }}>
-        <div style={{
-          padding: '8px 16px',
-          backgroundColor: 'rgba(0, 0, 0, 0.7)',
-          borderRadius: '20px',
-          color: 'white',
-          fontSize: '12px',
-          fontFamily: 'Courier New, monospace'
-        }}>
-          {currentIndex + 1} / {photos.length}
-        </div>
-      </div>
     </div>
   );
 };
