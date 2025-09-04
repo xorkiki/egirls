@@ -138,7 +138,8 @@ const CardStack = ({ photos, onSwipeComplete }) => {
                   width: '100%',
                   height: '100%',
                   objectFit: 'contain',
-                  display: 'block'
+                  display: 'block',
+                  borderRadius: '12px'
                 }}
                 draggable={false}
                 onError={(e) => {
