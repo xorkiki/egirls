@@ -1297,7 +1297,7 @@ html, body {
   }
   
   .terminal-content {
-    padding: 12px 20px 50px 20px; /* Add 50px bottom padding */
+    padding: 12px 20px 100px 20px; /* Add 100px bottom padding */
     margin-left: 0;
     margin-right: 0;
     box-sizing: border-box;
@@ -1422,7 +1422,7 @@ html, body {
 /* Very narrow screens (like 412px width) */
 @media (max-width: 450px) {
   .terminal-content {
-    padding: 8px 12px 50px 12px; /* Add 50px bottom padding */
+    padding: 8px 12px 100px 12px; /* Add 100px bottom padding */
   }
   
   .terminal-line {
