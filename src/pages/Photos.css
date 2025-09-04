@@ -27,7 +27,7 @@
   align-items: center;
   justify-content: flex-start;
   gap: 20px;
-  padding: 10px 18px;
+  padding: 8px 14px;
   background-color: #1a1a1a;
   position: relative;
   min-height: 40px;
@@ -201,7 +201,7 @@
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
   .photos-header {
-    padding: 12px 15px;
+    padding: 8px 14px;
     min-height: 40px;
   }
   
