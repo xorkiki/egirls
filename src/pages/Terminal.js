@@ -965,28 +965,16 @@ const Terminal = ({ onClose }) => {
     // Auto-scroll behavior - different for mobile vs desktop
     if (outputRef.current) {
       if (isMobile) {
-        // On mobile: smart auto-scroll with 50px bottom padding and center-based triggering
+        // On mobile: simple auto-scroll with 50px bottom padding
         const container = outputRef.current;
         const containerHeight = container.clientHeight;
         const scrollHeight = container.scrollHeight;
-        const currentScrollTop = container.scrollTop;
         
-        // If content height exceeds container height, start auto-scrolling
+        // If content height exceeds container height, auto-scroll
         if (scrollHeight > containerHeight) {
           const bottomPadding = 50; // Leave 50px space at bottom
-          const centerThreshold = containerHeight / 2; // Center of viewport
-          
-          // Calculate the target scroll position (scroll to bottom minus padding)
-          const targetScrollTop = scrollHeight - containerHeight + bottomPadding;
-          
-          // Start scrolling when content extends beyond the center of the viewport
-          const contentAtCenter = currentScrollTop + centerThreshold;
-          const shouldStartScrolling = scrollHeight > contentAtCenter;
-          
-          if (shouldStartScrolling) {
-            // Scroll to keep 50px space at bottom
-            container.scrollTop = targetScrollTop;
-          }
+          // Scroll to bottom minus padding
+          container.scrollTop = scrollHeight - containerHeight + bottomPadding;
         }
       } else {
         // Desktop: always scroll to bottom
