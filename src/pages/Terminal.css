@@ -36,7 +36,7 @@ html, body {
   border-bottom: 1px solid #333;
   -webkit-app-region: drag;
   position: relative;
-  min-height: 44px;
+  min-height: 40px;
 }
 
 .terminal-buttons {
@@ -416,7 +416,7 @@ html, body {
   padding: 10px 18px;
   background-color: #1a1a1a;
   position: relative;
-  min-height: 44px;
+  min-height: 40px;
 }
 
   .photos-header .terminal-buttons,
@@ -1104,7 +1104,7 @@ html, body {
   padding: 10px 18px;
   background-color: #1a1a1a;
   position: relative;
-  min-height: 44px;
+  min-height: 40px;
 }
 
 .transmissions-header .terminal-buttons {
@@ -1170,7 +1170,7 @@ html, body {
   padding: 10px 18px;
   background-color: #1a1a1a;
   position: relative;
-  min-height: 44px;
+  min-height: 40px;
 }
 
 .wine-night-header .terminal-buttons {

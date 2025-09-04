@@ -20,7 +20,7 @@
   padding: 10px 18px;
   background-color: #1a1a1a;
   position: relative;
-  min-height: 44px;
+  min-height: 40px;
 }
 
 .tattoos-header .terminal-buttons {
@@ -145,8 +145,8 @@
   .tattoos-header {
     padding: 8px 12px;
     width: 412px;
-    height: 44px;
-    min-height: 44px;
+    height: 40px;
+    min-height: 40px;
   }
   
   .terminal-title {
