@@ -735,6 +735,8 @@ const Terminal = ({ onClose }) => {
   const [inputWidth, setInputWidth] = useState(0);
   const [showMusicPlayer, setShowMusicPlayer] = useState(false);
   const [isCommandMenuCollapsed, setIsCommandMenuCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [hasAutoStarted, setHasAutoStarted] = useState(false);
   const inputRef = useRef(null);
   const outputRef = useRef(null);
   const promptRef = useRef(null);
@@ -862,6 +864,19 @@ const Terminal = ({ onClose }) => {
     };
   }, []);
 
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   useEffect(() => {
     // Add initial terminal output - only the login message, no prompt
     const isSmallScreen = window.innerWidth <= 412;
@@ -873,13 +888,36 @@ const Terminal = ({ onClose }) => {
       { type: 'system', content: loginMessage }
     ]);
 
-    // Focus input on mount
-    if (inputRef.current) {
+    // Focus input on mount (desktop only)
+    if (inputRef.current && !isMobile) {
       inputRef.current.focus();
     }
-  }, []);
+  }, [isMobile]);
 
-
+  // Auto-start typing sequence for mobile devices
+  useEffect(() => {
+    if (isMobile && !hasAutoStarted && currentPage === 'terminal') {
+      setHasAutoStarted(true);
+      
+      // Start auto-typing sequence after a short delay
+      const startAutoTyping = async () => {
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second after page load
+        
+        // Auto-type and execute 'ls' command
+        await autoTypeAndExecute('ls');
+        await new Promise(resolve => setTimeout(resolve, 1500)); // Wait 1.5 seconds
+        
+        // Auto-type and execute 'help' command
+        await autoTypeAndExecute('help');
+        await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds
+        
+        // Auto-type and execute 'cat manifesto.txt' command
+        await autoTypeAndExecute('cat manifesto.txt');
+      };
+      
+      startAutoTyping();
+    }
+  }, [isMobile, hasAutoStarted, currentPage, autoTypeAndExecute]);
 
   useEffect(() => {
     // Measure prompt width for cursor positioning
@@ -988,6 +1026,37 @@ const Terminal = ({ onClose }) => {
     currentOutput.push({ type: 'system', content: promptText });
     setOutput([...currentOutput]);
     setIsTyping(false);
+  };
+
+  // Auto-type and execute command for mobile
+  const autoTypeAndExecute = async (command, speed = 50) => {
+    setIsTyping(true);
+    let currentOutput = [...output];
+    
+    // Add prompt
+    const isSmallScreen = window.innerWidth <= 412;
+    const promptText = isSmallScreen 
+      ? 'egirls@egirls.faith ~ % '
+      : 'egirls@egirls.faith-MacBook-Pro ~ % ';
+    
+    currentOutput.push({ type: 'system', content: promptText });
+    setOutput([...currentOutput]);
+    
+    // Type the command
+    let typedCommand = '';
+    for (let i = 0; i < command.length; i++) {
+      typedCommand += command[i];
+      currentOutput.push({ type: 'input', content: typedCommand, showCursor: true });
+      setOutput([...currentOutput]);
+      await new Promise(resolve => setTimeout(resolve, speed));
+    }
+    
+    // Remove cursor from command
+    currentOutput[currentOutput.length - 1] = { type: 'input', content: typedCommand, showCursor: false };
+    setOutput([...currentOutput]);
+    
+    // Execute the command
+    await handleCommand(command);
   };
 
   const handleCommand = async (command) => {
