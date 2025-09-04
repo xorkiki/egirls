@@ -87,19 +87,18 @@ const CardStack = ({ photos, onSwipeComplete }) => {
               width: '280px',
               height: '350px',
               zIndex: card.zIndex,
-              cursor: card.isTop ? 'grab' : 'default',
-              transform: 'translate(-50%, -50%)'
+              cursor: card.isTop ? 'grab' : 'default'
             }}
             initial={{
-              x: card.offsetX,
-              y: card.offsetY,
+              x: card.offsetX - 140, // -140px to center the 280px wide card
+              y: card.offsetY - 175, // -175px to center the 350px tall card
               scale: card.scale,
               rotate: card.rotation,
               opacity: card.opacity
             }}
             animate={{
-              x: card.isTop ? 0 : card.offsetX,
-              y: card.isTop ? 0 : card.offsetY,
+              x: card.isTop ? -140 : card.offsetX - 140, // Center the top card
+              y: card.isTop ? -175 : card.offsetY - 175, // Center the top card
               scale: card.scale,
               rotate: card.isTop ? 0 : card.rotation,
               opacity: card.opacity
