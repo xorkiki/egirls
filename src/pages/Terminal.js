@@ -1451,6 +1451,9 @@ const Terminal = ({ onClose }) => {
             )}
           </div>
         )}
+        
+        {/* Mobile bottom spacer to prevent content from reaching bottom edge */}
+        {isMobile && <div style={{ height: '100px' }}></div>}
       </div>
 
       {/* Command Directory */}
