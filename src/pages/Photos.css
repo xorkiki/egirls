@@ -226,8 +226,8 @@
   
   /* Ensure folders stay within mobile viewport */
   .photos-content {
-    height: calc(100vh - 50px - 80px); /* Adjust for mobile header height */
-    top: 50px; /* Position below mobile header */
+    height: calc(100vh - 40px - 80px); /* Adjust for mobile header height */
+    top: 40px; /* Position below mobile header */
     overflow: hidden; /* Prevent content from extending beyond bounds */
   }
 }
