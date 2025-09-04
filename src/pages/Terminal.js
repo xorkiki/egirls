@@ -983,6 +983,20 @@ const Terminal = ({ onClose }) => {
     }
   }, [output, isMobile, isTyping]);
 
+  // Helper function for mobile auto-scroll
+  const mobileAutoScroll = () => {
+    if (isMobile && outputRef.current) {
+      const container = outputRef.current;
+      const containerHeight = container.clientHeight;
+      const scrollHeight = container.scrollHeight;
+      
+      if (scrollHeight > containerHeight) {
+        const bottomPadding = 50;
+        container.scrollTop = scrollHeight - containerHeight + bottomPadding;
+      }
+    }
+  };
+
   // Auto-focus input whenever terminal becomes visible
   useEffect(() => {
     if (currentPage === 'terminal' && inputRef.current && !isTyping) {
@@ -1041,6 +1055,8 @@ const Terminal = ({ onClose }) => {
         if (j % batchSize === 0 || j === line.length - 1) {
           currentOutput[currentOutput.length - 1] = { type: 'output', content: currentLine, showCursor: true };
           setOutput([...currentOutput]);
+          // Trigger auto-scroll on mobile during typing
+          setTimeout(() => mobileAutoScroll(), 10);
         }
         
         await new Promise(resolve => setTimeout(resolve, speed));
@@ -1053,6 +1069,8 @@ const Terminal = ({ onClose }) => {
       if (i < lines.length - 1) {
         currentOutput.push({ type: 'output', content: '' });
         setOutput([...currentOutput]);
+        // Trigger auto-scroll on mobile when adding new lines
+        setTimeout(() => mobileAutoScroll(), 10);
       }
     }
 
