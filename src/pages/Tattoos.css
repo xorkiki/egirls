@@ -20,7 +20,6 @@
   background-color: #1a1a1a;
   position: relative;
   min-height: 44px;
-  border-bottom: 1px solid #333;
 }
 
 .tattoos-header .terminal-buttons {
@@ -166,10 +165,8 @@
   .tattoos-header .terminal-title {
     font-size: 11px;
     order: 2;
-    margin-left: auto; /* Push title to the right side */
+    margin-left: auto; /* Push title to right side */
     white-space: nowrap;
-    font-family: 'Courier New', 'Monaco', monospace;
-    letter-spacing: 0.5px;
     flex-shrink: 0; /* Prevent title from shrinking */
   }
 
@@ -208,7 +205,7 @@
   .tattoos-header .terminal-title {
     font-size: 11px;
     order: 2;
-    margin-left: auto; /* Push title to the right side */
+    margin-left: auto; /* Push title to right side */
     white-space: nowrap;
     font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
     letter-spacing: 0.5px;
@@ -244,7 +241,7 @@
     font-size: 10px;
     font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
     letter-spacing: 0.5px;
-    margin-left: auto; /* Push title to the right side */
+    margin-left: auto; /* Push title to right side */
     flex-shrink: 0; /* Prevent title from shrinking */
   }
   
