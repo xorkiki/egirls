@@ -742,7 +742,7 @@ const Terminal = ({ onClose }) => {
   const promptRef = useRef(null);
 
   const commands = {
-    'help': 'Available commands:\n• cd about/ - Navigate to about page\n• cd origins/ - Navigate to origins page\n• cd photos/ - Navigate to photos page\n• cd identity/ - Navigate to identity page\n• cd frequencies/ - Toggle music player (desktop only)\n• cat manifesto.txt - Display manifesto in terminal\n• help - Show this help\n• clear - Clear terminal\n• exit - Return to landing page',
+    'help': 'available commands:\n• cd about/ - navigate to about page\n• cd origins/ - navigate to origins page\n• cd photos/ - navigate to photos page\n• cd identity/ - navigate to identity page\n• cd frequencies/ - toggle music player (desktop only)\n• cat manifesto.txt - display manifesto in terminal\n• help - show this help\n• clear - clear terminal\n• exit - return to landing page',
     'about': 'Egirls is a digital art collective exploring the intersection of technology, identity, and expression. We create immersive experiences that challenge conventional web design paradigms.',
     'clear': 'clear',
     'exit': 'exit'
