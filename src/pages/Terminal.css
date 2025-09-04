@@ -1303,6 +1303,9 @@ html, body {
     box-sizing: border-box;
     width: 100%;
     max-width: 100%;
+    overflow-x: hidden; /* Prevent horizontal overflow */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
   
   .terminal-line {
@@ -1313,6 +1316,7 @@ html, body {
     max-width: 100%;
     word-break: break-word;
     overflow-wrap: break-word;
+    overflow-x: hidden; /* Prevent horizontal overflow */
   }
   
   /* Wine Night mobile improvements */
@@ -1423,6 +1427,9 @@ html, body {
 @media (max-width: 450px) {
   .terminal-content {
     padding: 8px 12px 100px 12px; /* Add 100px bottom padding */
+    overflow-x: hidden; /* Prevent horizontal overflow */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
   
   .terminal-line {
@@ -1430,6 +1437,7 @@ html, body {
     word-break: break-word;
     overflow-wrap: break-word;
     white-space: pre-wrap;
+    overflow-x: hidden; /* Prevent horizontal overflow */
   }
   
   .terminal-input-line {
