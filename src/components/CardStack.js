@@ -49,8 +49,7 @@ const CardStack = ({ photos, onSwipeComplete }) => {
         scale: 1 - (stackOffset * 0.05), // Slight scale down for depth
         rotation: isTop ? 0 : (Math.random() - 0.5) * 10, // Random rotation for stack effect
         offsetX: isTop ? 0 : (Math.random() - 0.5) * 20, // Random horizontal offset
-        offsetY: isTop ? 0 : (Math.random() - 0.5) * 15, // Random vertical offset
-        opacity: isTop ? 1 : 0.9 - (stackOffset * 0.1)
+        offsetY: isTop ? 0 : (Math.random() - 0.5) * 15 // Random vertical offset
       });
     }
     
@@ -91,14 +90,14 @@ const CardStack = ({ photos, onSwipeComplete }) => {
               y: card.offsetY,
               scale: card.scale,
               rotate: card.rotation,
-              opacity: card.opacity
+              opacity: 1
             }}
             animate={{
               x: card.isTop ? 0 : card.offsetX,
               y: card.isTop ? 0 : card.offsetY,
               scale: card.scale,
               rotate: card.isTop ? 0 : card.rotation,
-              opacity: card.opacity
+              opacity: 1
             }}
             exit={{
               x: exitX,
@@ -131,7 +130,7 @@ const CardStack = ({ photos, onSwipeComplete }) => {
                 objectFit: 'contain',
                 display: 'block',
                 borderRadius: '12px',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+                opacity: 1
               }}
               draggable={false}
               onError={(e) => {
