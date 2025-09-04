@@ -965,37 +965,14 @@ const Terminal = ({ onClose }) => {
     // Auto-scroll behavior - different for mobile vs desktop
     if (outputRef.current) {
       if (isMobile) {
-        // On mobile: simple auto-scroll with 50px bottom padding
-        const container = outputRef.current;
-        const containerHeight = container.clientHeight;
-        const scrollHeight = container.scrollHeight;
-        
-        // If content height exceeds container height, auto-scroll
-        if (scrollHeight > containerHeight) {
-          const bottomPadding = 50; // Leave 50px space at bottom
-          // Scroll to bottom minus padding
-          container.scrollTop = scrollHeight - containerHeight + bottomPadding;
-        }
+        // On mobile: scroll to bottom (CSS padding handles the 50px spacing)
+        outputRef.current.scrollTop = outputRef.current.scrollHeight;
       } else {
         // Desktop: always scroll to bottom
         outputRef.current.scrollTop = outputRef.current.scrollHeight;
       }
     }
   }, [output, isMobile, isTyping]);
-
-  // Helper function for mobile auto-scroll
-  const mobileAutoScroll = () => {
-    if (isMobile && outputRef.current) {
-      const container = outputRef.current;
-      const containerHeight = container.clientHeight;
-      const scrollHeight = container.scrollHeight;
-      
-      if (scrollHeight > containerHeight) {
-        const bottomPadding = 50;
-        container.scrollTop = scrollHeight - containerHeight + bottomPadding;
-      }
-    }
-  };
 
   // Auto-focus input whenever terminal becomes visible
   useEffect(() => {
@@ -1055,8 +1032,6 @@ const Terminal = ({ onClose }) => {
         if (j % batchSize === 0 || j === line.length - 1) {
           currentOutput[currentOutput.length - 1] = { type: 'output', content: currentLine, showCursor: true };
           setOutput([...currentOutput]);
-          // Trigger auto-scroll on mobile during typing
-          setTimeout(() => mobileAutoScroll(), 10);
         }
         
         await new Promise(resolve => setTimeout(resolve, speed));
@@ -1069,8 +1044,6 @@ const Terminal = ({ onClose }) => {
       if (i < lines.length - 1) {
         currentOutput.push({ type: 'output', content: '' });
         setOutput([...currentOutput]);
-        // Trigger auto-scroll on mobile when adding new lines
-        setTimeout(() => mobileAutoScroll(), 10);
       }
     }
 
