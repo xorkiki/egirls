@@ -742,7 +742,7 @@ const Terminal = ({ onClose }) => {
   const promptRef = useRef(null);
 
   const commands = {
-    'help': 'available commands:\n• cd about/ - navigate to about page\n• cd origins/ - navigate to origins page\n• cd photos/ - navigate to photos page\n• cd identity/ - navigate to identity page\n• cd frequencies/ - toggle music player (desktop only)\n• cat manifesto.txt - display manifesto in terminal\n• help - show this help\n• clear - clear terminal\n• exit - return to landing page',
+    'help': 'available commands:\n• cd about/ - navigate to about page\n• cd origins/ - navigate to origins page\n• cd photos/ - navigate to photos page\n• cd identity/ - navigate to identity page\n• cd frequencies/ - toggle music player (desktop only)\n• manifesto.txt - display manifesto in terminal\n• help - show this help\n• clear - clear terminal\n• exit - return to landing page',
     'about': 'Egirls is a digital art collective exploring the intersection of technology, identity, and expression. We create immersive experiences that challenge conventional web design paradigms.',
     'clear': 'clear',
     'exit': 'exit'
@@ -808,7 +808,7 @@ const Terminal = ({ onClose }) => {
     'cd photos/',
     'cd identity/',
     'cd frequencies/',
-    'cat manifesto.txt'
+    'manifesto.txt'
   ];
 
   // Add ESC key functionality for all pages
@@ -979,14 +979,13 @@ const Terminal = ({ onClose }) => {
           // Calculate the target scroll position (scroll to bottom minus padding)
           const targetScrollTop = scrollHeight - containerHeight + bottomPadding;
           
-          // Only start scrolling when content has passed the center of the viewport
+          // Start scrolling when content extends beyond the center of the viewport
           const contentAtCenter = currentScrollTop + centerThreshold;
-          const shouldStartScrolling = scrollHeight > contentAtCenter + centerThreshold;
+          const shouldStartScrolling = scrollHeight > contentAtCenter;
           
           if (shouldStartScrolling) {
-            // Scroll to keep 50px space at bottom, but don't scroll past the target
-            const newScrollTop = Math.min(targetScrollTop, scrollHeight - containerHeight + bottomPadding);
-            container.scrollTop = newScrollTop;
+            // Scroll to keep 50px space at bottom
+            container.scrollTop = targetScrollTop;
           }
         }
       } else {
@@ -994,7 +993,7 @@ const Terminal = ({ onClose }) => {
         outputRef.current.scrollTop = outputRef.current.scrollHeight;
       }
     }
-  }, [output, isMobile]);
+  }, [output, isMobile, isTyping]);
 
   // Auto-focus input whenever terminal becomes visible
   useEffect(() => {
@@ -1103,7 +1102,7 @@ const Terminal = ({ onClose }) => {
     } else {
       setShowMusicPlayer(!showMusicPlayer);
     }
-  } else if (trimmedCommand === 'cat manifesto.txt') {
+  } else if (trimmedCommand === 'manifesto.txt') {
       // Close music player when manifesto starts typing
       setShowMusicPlayer(false);
       await typeOutText(manifestos.join('\n'));
