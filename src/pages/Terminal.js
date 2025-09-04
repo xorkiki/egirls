@@ -1082,6 +1082,8 @@ const Terminal = ({ onClose }) => {
       // Close music player when manifesto starts typing
       setShowMusicPlayer(false);
       await typeOutText(manifestos.join('\n'));
+    } else if (trimmedCommand === 'ls') {
+      await typeOutText('about/\norigins/\nphotos/\nidentity/\ntransmissions/\nfrequencies/\nmanifesto.txt');
     } else if (trimmedCommand === 'help') {
       setCurrentPage('help');
       await typeOutText(commands.help);
