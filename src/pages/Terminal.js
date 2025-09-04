@@ -962,11 +962,35 @@ const Terminal = ({ onClose }) => {
   }, [inputValue]);
 
   useEffect(() => {
-    // Auto-scroll to bottom when output changes
+    // Auto-scroll behavior - different for mobile vs desktop
     if (outputRef.current) {
-      outputRef.current.scrollTop = outputRef.current.scrollHeight;
+      if (isMobile) {
+        // On mobile: start scrolling when content reaches middle of viewport
+        const container = outputRef.current;
+        const containerHeight = container.clientHeight;
+        const scrollHeight = container.scrollHeight;
+        const currentScrollTop = container.scrollTop;
+        
+        // If content height exceeds container height, start auto-scrolling
+        if (scrollHeight > containerHeight) {
+          // Calculate when to start scrolling (when content reaches middle of viewport)
+          const scrollThreshold = containerHeight / 2;
+          
+          // If we're near the bottom or content is growing, scroll to keep content visible
+          if (currentScrollTop + containerHeight >= scrollHeight - 100) {
+            // Near bottom - scroll to bottom
+            container.scrollTop = scrollHeight;
+          } else if (scrollHeight - currentScrollTop > containerHeight + scrollThreshold) {
+            // Content is growing and we're not at bottom - scroll to keep middle visible
+            container.scrollTop = scrollHeight - containerHeight + scrollThreshold;
+          }
+        }
+      } else {
+        // Desktop: always scroll to bottom
+        outputRef.current.scrollTop = outputRef.current.scrollHeight;
+      }
     }
-  }, [output]);
+  }, [output, isMobile]);
 
   // Auto-focus input whenever terminal becomes visible
   useEffect(() => {
