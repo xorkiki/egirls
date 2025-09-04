@@ -399,7 +399,6 @@ html, body {
   z-index: 1000;
 }
 
-  .photos-header,
   .identity-header,
   .transmissions-header,
   .manifesto-header {
@@ -413,13 +412,11 @@ html, body {
   min-height: 40px;
 }
 
-  .photos-header .terminal-buttons,
   .manifesto-header .terminal-buttons {
   display: flex;
   gap: 9px;
 }
 
-  .photos-header .terminal-button,
   .manifesto-header .terminal-button {
   width: 14px;
   height: 14px;
@@ -429,37 +426,31 @@ html, body {
   transition: all 0.2s ease;
 }
 
-.photos-header .terminal-button.close,
 .identity-header .terminal-button.close,
 .manifesto-header .terminal-button.close {
   background-color: #ff5f56;
 }
 
-.photos-header .terminal-button.close:hover,
 .identity-header .terminal-button.close:hover,
 .manifesto-header .terminal-button.close:hover {
   background-color: #ff4444;
 }
 
-.photos-header .terminal-button.close:hover .close-icon,
 .identity-header .terminal-button.close:hover .close-icon,
 .manifesto-header .terminal-button.close:hover .close-icon {
   opacity: 1;
 }
 
-.photos-header .terminal-button.minimize,
 .identity-header .terminal-button.minimize,
 .manifesto-header .terminal-button.minimize {
   background-color: #ffbd2e;
 }
 
-.photos-header .terminal-button.maximize,
 .identity-header .terminal-button.maximize,
 .manifesto-header .terminal-button.maximize {
   background-color: #27ca3f;
 }
 
-.photos-header .terminal-title,
 .identity-header .terminal-title,
 .manifesto-header .terminal-title {
   font-size: 13px;
