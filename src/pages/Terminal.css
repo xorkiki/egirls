@@ -1310,7 +1310,6 @@ html, body {
   
   .terminal-title {
     max-width: 150px;
-    margin: 0;
     text-align: center;
     flex: 1;
   }
