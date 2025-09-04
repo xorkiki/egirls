@@ -4,6 +4,7 @@ import Origins from './Origins';
 import Photos from './Photos';
 import WineNight from './WineNight';
 import Tattoos from './Tattoos';
+import CardStack from '../components/CardStack';
 
 import './Terminal.css';
 
@@ -400,13 +401,8 @@ const DigitalCollage = () => {
   const [loadedImages, setLoadedImages] = useState(new Set());
   const [visibleImages, setVisibleImages] = useState(new Set());
   
-  // Mobile stack state
-  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  // Mobile detection
   const [isMobile, setIsMobile] = useState(false);
-  const [touchStartX, setTouchStartX] = useState(0);
-  const [touchEndX, setTouchEndX] = useState(0);
-  const [touchStartTime, setTouchStartTime] = useState(0);
-  const [swipeVelocity, setSwipeVelocity] = useState(0);
 
   // Define brandPhotos locally to avoid scope issues
   const brandPhotos = [
@@ -444,84 +440,12 @@ const DigitalCollage = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Mobile photo stack functions
-  const nextPhoto = () => {
-    setCurrentPhotoIndex((prev) => (prev + 1) % brandPhotos.length);
-  };
-
-  const previousPhoto = () => {
-    setCurrentPhotoIndex((prev) => (prev - 1 + brandPhotos.length) % brandPhotos.length);
-  };
-
-
-
-  const handleSwipe = (threshold = 15) => {
-    const swipeThreshold = threshold; // Reduced default threshold for more sensitivity
-    const diff = touchStartX - touchEndX;
-    
-    if (Math.abs(diff) > swipeThreshold) {
-      if (diff > 0) {
-        // Swipe left - next photo
-        nextPhoto();
-      } else {
-        // Swipe right - previous photo
-        previousPhoto();
-      }
-    }
-  };
 
   // Memoize image styles to prevent recalculation on every render
   const imageStyles = useMemo(() => {
     if (isMobile) {
-      // Mobile stack layout
-      return brandPhotos.map((_, index) => {
-        const isTopPhoto = index === currentPhotoIndex;
-        const stackOffset = (index - currentPhotoIndex + brandPhotos.length) % brandPhotos.length;
-        
-        // Calculate stack position
-        let zIndex, opacity, transform, left, top;
-        
-        if (isTopPhoto) {
-          // Top photo - fully visible, centered
-          zIndex = 1000;
-          opacity = 1;
-          transform = 'rotate(0deg)';
-          left = '50%';
-          top = '50%';
-        } else if (stackOffset <= 3) {
-          // Next few photos - peek out from behind with slight offset
-          zIndex = 1000 - stackOffset;
-          opacity = 0.8 - (stackOffset * 0.2);
-          const rotation = (Math.random() - 0.5) * 20; // Slight random rotation
-          // Constrain offsets to prevent photos from going outside container bounds
-          const maxOffsetX = 30; // Reduced from 40 to keep photos within bounds
-          const maxOffsetY = 20; // Reduced from 30 to keep photos within bounds
-          const offsetX = (Math.random() - 0.5) * maxOffsetX;
-          const offsetY = (Math.random() - 0.5) * maxOffsetY;
-          transform = `rotate(${rotation}deg) translate(${offsetX}px, ${offsetY}px)`;
-          left = '50%';
-          top = '50%';
-        } else {
-          // Hidden photos
-          zIndex = 0;
-          opacity = 0;
-          transform = 'rotate(0deg)';
-          left = '50%';
-          top = '50%';
-        }
-        
-        return {
-          position: 'absolute',
-          left,
-          top,
-          transform: `translate(-50%, -50%) ${transform}`,
-          zIndex,
-          opacity,
-          transition: 'all 0.25s cubic-bezier(0.4, 0.0, 0.2, 1)',
-          width: '300px',
-          height: '225px'
-        };
-      });
+      // Mobile uses CardStack component, return empty array
+      return [];
     }
     
     // Desktop collage layout (existing code)
@@ -630,7 +554,7 @@ const DigitalCollage = () => {
               transition: isDragging ? 'none' : 'transform 0.3s ease-out'
             };
           });
-  }, [isMobile, currentPhotoIndex, brandPhotos.length, dragOffset.x, dragOffset.y, isDragging]);
+  }, [isMobile, brandPhotos.length, dragOffset.x, dragOffset.y, isDragging]);
 
 
 
@@ -663,13 +587,9 @@ const DigitalCollage = () => {
     setIsDragging(false);
   };
 
-  // Handle touch events for both mobile swiping and desktop dragging
+  // Handle touch events for desktop dragging only (mobile uses CardStack)
   const handleTouchStart = (e) => {
-    if (isMobile && e.touches.length === 1) {
-      // Mobile: handle swipe gestures with timestamp for velocity
-      setTouchStartX(e.touches[0].clientX);
-      setTouchStartTime(Date.now()); // Add timestamp for velocity detection
-    } else if (!isMobile && e.touches.length === 1) {
+    if (!isMobile && e.touches.length === 1) {
       // Desktop: handle drag
       setIsDragging(true);
       setDragStart({
@@ -680,71 +600,20 @@ const DigitalCollage = () => {
   };
   
   const handleTouchMove = (e) => {
-    if (isMobile) {
-      // Mobile: prevent default scrolling for swipe gestures
-      e.preventDefault();
-      
-      // Update touch position for real-time swipe detection with momentum
-      if (e.touches.length === 1) {
-        const currentX = e.touches[0].clientX;
-        setTouchEndX(currentX);
-        
-        // Calculate swipe velocity in real-time for better responsiveness
-        const currentTime = Date.now();
-        const timeDiff = currentTime - touchStartTime;
-        if (timeDiff > 0) {
-          const velocity = Math.abs(currentX - touchStartX) / timeDiff;
-          // Store velocity for potential momentum-based detection
-          setSwipeVelocity(velocity);
-        }
-      }
-      return;
-    }
-    
     // Desktop: handle drag
-    if (!isDragging || e.touches.length !== 1) return;
-    
-    e.preventDefault(); // Prevent default scrolling
-    
-    requestAnimationFrame(() => {
-      const newOffsetX = e.touches[0].clientX - dragStart.x;
-      const newOffsetY = e.touches[0].clientY - dragStart.y;
-      setDragOffset({ x: newOffsetX, y: newOffsetY });
-    });
+    if (!isMobile && isDragging && e.touches.length === 1) {
+      e.preventDefault(); // Prevent default scrolling
+      
+      requestAnimationFrame(() => {
+        const newOffsetX = e.touches[0].clientX - dragStart.x;
+        const newOffsetY = e.touches[0].clientY - dragStart.y;
+        setDragOffset({ x: newOffsetX, y: newOffsetY });
+      });
+    }
   };
   
   const handleTouchEnd = (e) => {
-    if (isMobile && e.changedTouches.length === 1) {
-      // Mobile: handle swipe with enhanced velocity detection
-      setTouchEndX(e.changedTouches[0].clientX);
-      const touchEndTime = Date.now();
-      const touchDuration = touchEndTime - touchStartTime;
-      
-      // Much more sensitive velocity detection like Instagram/TikTok
-      let dynamicThreshold;
-      if (touchDuration < 150) {
-        // Very fast flick - extremely sensitive
-        dynamicThreshold = 8;
-      } else if (touchDuration < 250) {
-        // Fast swipe - very sensitive
-        dynamicThreshold = 12;
-      } else if (touchDuration < 400) {
-        // Medium swipe - moderately sensitive
-        dynamicThreshold = 18;
-      } else {
-        // Slow swipe - standard sensitivity
-        dynamicThreshold = 25;
-      }
-      
-      // Additional velocity-based threshold reduction for high-speed gestures
-      if (swipeVelocity > 2.0) { // High velocity threshold
-        dynamicThreshold = Math.max(5, dynamicThreshold - 8); // Reduce threshold for fast gestures
-      } else if (swipeVelocity > 1.0) { // Medium velocity threshold
-        dynamicThreshold = Math.max(6, dynamicThreshold - 5); // Reduce threshold for medium gestures
-      }
-      
-      handleSwipe(dynamicThreshold);
-    } else if (!isMobile) {
+    if (!isMobile) {
       // Desktop: end drag
       setIsDragging(false);
     }
@@ -792,53 +661,62 @@ const DigitalCollage = () => {
     >
       <div className="collage-content">
         {brandPhotos && brandPhotos.length > 0 ? (
-          brandPhotos.map((photo, index) => (
-            <div
-              key={index}
-              className={`collage-image ${hoveredImage === index ? 'hovered' : ''}`}
-              style={imageStyles[index]}
-            >
-              {visibleImages.has(index) ? (
-                <img 
-                  src={photo} 
-                  alt={`Brand asset ${index + 1}`}
-                  draggable="false"
-                  loading="lazy"
-                  onMouseEnter={() => setHoveredImage(index)}
-                  onMouseLeave={() => setHoveredImage(null)}
-                  style={{ 
-                    opacity: loadedImages.has(index) ? 1 : 0,
-                    transition: 'opacity 0.3s ease-in'
-                  }}
-                  onLoad={(e) => {
-                    setLoadedImages(prev => new Set([...prev, index]));
-                    e.target.style.opacity = '1';
-                  }}
-                  onError={(e) => {
-                    console.error('Failed to load image:', photo);
-                    e.target.style.opacity = '0.5';
-                  }}
-                />
-              ) : (
-                <div 
-                  className="image-placeholder"
-                  style={{
-                    width: '400px',
-                    height: '300px',
-                    backgroundColor: '#1a1a1a',
-                    borderRadius: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#666',
-                    fontSize: '14px'
-                  }}
-                >
-                  Loading...
-                </div>
-              )}
-            </div>
-          ))
+          isMobile ? (
+            <CardStack 
+              photos={brandPhotos}
+              onSwipeComplete={(direction) => {
+                console.log(`Swiped ${direction > 0 ? 'right' : 'left'}`);
+              }}
+            />
+          ) : (
+            brandPhotos.map((photo, index) => (
+              <div
+                key={index}
+                className={`collage-image ${hoveredImage === index ? 'hovered' : ''}`}
+                style={imageStyles[index]}
+              >
+                {visibleImages.has(index) ? (
+                  <img 
+                    src={photo} 
+                    alt={`Brand asset ${index + 1}`}
+                    draggable="false"
+                    loading="lazy"
+                    onMouseEnter={() => setHoveredImage(index)}
+                    onMouseLeave={() => setHoveredImage(null)}
+                    style={{ 
+                      opacity: loadedImages.has(index) ? 1 : 0,
+                      transition: 'opacity 0.3s ease-in'
+                    }}
+                    onLoad={(e) => {
+                      setLoadedImages(prev => new Set([...prev, index]));
+                      e.target.style.opacity = '1';
+                    }}
+                    onError={(e) => {
+                      console.error('Failed to load image:', photo);
+                      e.target.style.opacity = '0.5';
+                    }}
+                  />
+                ) : (
+                  <div 
+                    className="image-placeholder"
+                    style={{
+                      width: '400px',
+                      height: '300px',
+                      backgroundColor: '#1a1a1a',
+                      borderRadius: '8px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#666',
+                      fontSize: '14px'
+                    }}
+                  >
+                    Loading...
+                  </div>
+                )}
+              </div>
+            ))
+          )
         ) : (
           <p style={{color: 'white', textAlign: 'center'}}>No brand photos found</p>
         )}
