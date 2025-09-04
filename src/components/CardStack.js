@@ -82,10 +82,13 @@ const CardStack = ({ photos, onSwipeComplete }) => {
             className="card"
             style={{
               position: 'absolute',
+              left: '50%',
+              top: '50%',
               width: '280px',
               height: '350px',
               zIndex: card.zIndex,
-              cursor: card.isTop ? 'grab' : 'default'
+              cursor: card.isTop ? 'grab' : 'default',
+              transform: 'translate(-50%, -50%)'
             }}
             initial={{
               x: card.offsetX,
