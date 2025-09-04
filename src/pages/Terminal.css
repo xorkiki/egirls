@@ -134,9 +134,7 @@ html, body {
   margin-bottom: 2px;
   white-space: pre-wrap;
   word-wrap: break-word;
-  word-break: break-word;
   overflow-wrap: break-word;
-  hyphens: auto;
   text-align: left;
   color: #fff;
   padding-left: 0;
@@ -1315,7 +1313,6 @@ html, body {
     max-width: 100%;
     word-break: break-word;
     overflow-wrap: break-word;
-    hyphens: auto;
   }
   
   /* Wine Night mobile improvements */
@@ -1432,7 +1429,6 @@ html, body {
     font-size: 14px;
     word-break: break-word;
     overflow-wrap: break-word;
-    hyphens: auto;
     white-space: pre-wrap;
   }
   
