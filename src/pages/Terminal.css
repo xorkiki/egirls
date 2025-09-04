@@ -748,6 +748,14 @@ html, body {
   box-sizing: border-box;
 }
 
+/* Mobile-specific override to remove padding for CardStack centering */
+@media (max-width: 768px) {
+  .collage-content {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
 
 
 /* Identity page styles */
