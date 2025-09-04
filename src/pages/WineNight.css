@@ -150,7 +150,7 @@
   width: 100%;
   height: 100vh; /* Full viewport height - footer will overlay */
   background-color: #000;
-  overflow: hidden; /* Hide scrollbars */
+  overflow: hidden;
   position: relative;
   user-select: none; /* Prevent text selection during drag */
   touch-action: pan-x; /* Allow horizontal touch scrolling */
