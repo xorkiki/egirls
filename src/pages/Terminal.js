@@ -934,10 +934,6 @@ const Terminal = ({ onClose }) => {
       const startAutoTyping = async () => {
         await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second after page load
         
-        // Auto-type and execute 'ls' command
-        await autoTypeAndExecute('ls');
-        await new Promise(resolve => setTimeout(resolve, 1500)); // Wait 1.5 seconds
-        
         // Auto-type and execute 'help' command
         await autoTypeAndExecute('help');
       };
