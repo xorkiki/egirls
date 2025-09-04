@@ -64,7 +64,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 14px;
+  padding: 0;
   background-color: #1a1a1a;
   position: relative;
   min-height: 40px;
@@ -181,7 +181,7 @@
 /* Mobile Responsive Styles - exactly matching Terminal page */
 @media (max-width: 768px) {
   .origins-header {
-    padding: 8px 14px;
+    padding: 0;
     min-height: 40px;
   }
   
