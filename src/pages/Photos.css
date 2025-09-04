@@ -82,9 +82,12 @@
   right: auto !important;
   top: auto !important;
   transform: none !important;
-  flex: 1 !important;
+  flex: none !important;
+  width: auto !important;
+  height: auto !important;
   text-align: center !important;
   box-sizing: border-box !important;
+  display: inline-block !important;
 }
 
 .photos-content {
