@@ -965,7 +965,7 @@ const Terminal = ({ onClose }) => {
     // Auto-scroll behavior - different for mobile vs desktop
     if (outputRef.current) {
       if (isMobile) {
-        // On mobile: start scrolling when content reaches middle of viewport
+        // On mobile: smart auto-scroll with 50px bottom padding and center-based triggering
         const container = outputRef.current;
         const containerHeight = container.clientHeight;
         const scrollHeight = container.scrollHeight;
@@ -973,16 +973,20 @@ const Terminal = ({ onClose }) => {
         
         // If content height exceeds container height, start auto-scrolling
         if (scrollHeight > containerHeight) {
-          // Calculate when to start scrolling (when content reaches middle of viewport)
-          const scrollThreshold = containerHeight / 2;
+          const bottomPadding = 50; // Leave 50px space at bottom
+          const centerThreshold = containerHeight / 2; // Center of viewport
           
-          // If we're near the bottom or content is growing, scroll to keep content visible
-          if (currentScrollTop + containerHeight >= scrollHeight - 100) {
-            // Near bottom - scroll to bottom
-            container.scrollTop = scrollHeight;
-          } else if (scrollHeight - currentScrollTop > containerHeight + scrollThreshold) {
-            // Content is growing and we're not at bottom - scroll to keep middle visible
-            container.scrollTop = scrollHeight - containerHeight + scrollThreshold;
+          // Calculate the target scroll position (scroll to bottom minus padding)
+          const targetScrollTop = scrollHeight - containerHeight + bottomPadding;
+          
+          // Only start scrolling when content has passed the center of the viewport
+          const contentAtCenter = currentScrollTop + centerThreshold;
+          const shouldStartScrolling = scrollHeight > contentAtCenter + centerThreshold;
+          
+          if (shouldStartScrolling) {
+            // Scroll to keep 50px space at bottom, but don't scroll past the target
+            const newScrollTop = Math.min(targetScrollTop, scrollHeight - containerHeight + bottomPadding);
+            container.scrollTop = newScrollTop;
           }
         }
       } else {
