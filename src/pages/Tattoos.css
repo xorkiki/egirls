@@ -15,8 +15,9 @@
 .tattoos-header {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Keep buttons on left */
-  padding: 12px 20px;
+  justify-content: flex-start;
+  gap: 20px;
+  padding: 10px 18px;
   background-color: #1a1a1a;
   position: relative;
   min-height: 44px;
@@ -24,20 +25,16 @@
 
 .tattoos-header .terminal-buttons {
   display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-shrink: 0;
+  gap: 9px;
 }
 
 .tattoos-header .terminal-button {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   cursor: pointer;
   position: relative;
   transition: all 0.2s ease;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .tattoos-header .terminal-button.close {
@@ -76,9 +73,10 @@
   color: #fff;
   font-weight: bold;
   margin: 0;
-  font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
-  letter-spacing: 0.5px;
-  margin-left: auto; /* Push title to the right side */
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .tattoos-content {
@@ -145,29 +143,12 @@
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
   .tattoos-header {
-    padding: 8px 12px;
-    min-height: 36px;
-    justify-content: flex-start; /* Keep buttons on left */
-    flex-direction: row;
-    align-items: center;
-    gap: 0;
-    position: relative;
+    padding: 12px 15px;
+    min-height: 50px;
   }
   
-  .tattoos-header .terminal-buttons {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-    order: 1;
-    flex-shrink: 0; /* Prevent buttons from shrinking */
-  }
-  
-  .tattoos-header .terminal-title {
-    font-size: 11px;
-    order: 2;
-    margin-left: auto; /* Push title to right side */
-    white-space: nowrap;
-    flex-shrink: 0; /* Prevent title from shrinking */
+  .terminal-title {
+    font-size: 16px;
   }
 
   /* Terminal button mobile styles */
@@ -181,80 +162,3 @@
     font-size: 7px;
   }
 }
-
-/* Medium mobile devices (451px - 768px) */
-@media (min-width: 451px) and (max-width: 768px) {
-  .tattoos-header {
-    padding: 8px 12px;
-    min-height: 36px;
-    justify-content: flex-start; /* Keep buttons on left */
-    flex-direction: row;
-    align-items: center;
-    gap: 0;
-    position: relative;
-  }
-  
-  .tattoos-header .terminal-buttons {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-    order: 1;
-    flex-shrink: 0; /* Prevent buttons from shrinking */
-  }
-  
-  .tattoos-header .terminal-title {
-    font-size: 11px;
-    order: 2;
-    margin-left: auto; /* Push title to right side */
-    white-space: nowrap;
-    font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
-    letter-spacing: 0.5px;
-    flex-shrink: 0; /* Prevent title from shrinking */
-  }
-
-  /* Terminal button mobile styles */
-  .terminal-button {
-    width: 10px;
-    height: 10px;
-    flex-shrink: 0;
-  }
-  
-  .close-icon {
-    font-size: 7px;
-  }
-}
-
-/* Very narrow screens (like 412px width) */
-@media (max-width: 450px) {
-  .tattoos-header {
-    padding: 6px 10px;
-    min-height: 32px;
-    justify-content: flex-start; /* Keep buttons on left */
-  }
-  
-  .tattoos-header .terminal-buttons {
-    gap: 5px;
-    flex-shrink: 0; /* Prevent buttons from shrinking */
-  }
-  
-  .tattoos-header .terminal-title {
-    font-size: 10px;
-    font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
-    letter-spacing: 0.5px;
-    margin-left: auto; /* Push title to right side */
-    flex-shrink: 0; /* Prevent title from shrinking */
-  }
-  
-  .terminal-button {
-    width: 9px;
-    height: 9px;
-  }
-  
-  .close-icon {
-    font-size: 6px;
-  }
-}
-
-/* Terminal Button Styles - Removed duplicates to match Wine Night page */
-
-/* Mobile Responsive Styles - Removed conflicting styles to match Wine Night page */
