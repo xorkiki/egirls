@@ -122,32 +122,23 @@ const CardStack = ({ photos, onSwipeComplete }) => {
               zIndex: 1001
             }}
           >
-            <div
+            <img
+              src={card.photo}
+              alt={`Brand asset ${card.index + 1}`}
               style={{
                 width: '100%',
                 height: '100%',
+                objectFit: 'contain',
+                display: 'block',
                 borderRadius: '12px',
-                overflow: 'hidden',
                 boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
               }}
-            >
-              <img
-                src={card.photo}
-                alt={`Brand asset ${card.index + 1}`}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'contain',
-                  display: 'block',
-                  borderRadius: '12px'
-                }}
-                draggable={false}
-                onError={(e) => {
-                  console.error('Failed to load image:', card.photo);
-                  e.target.style.opacity = '0.5';
-                }}
-              />
-            </div>
+              draggable={false}
+              onError={(e) => {
+                console.error('Failed to load image:', card.photo);
+                e.target.style.opacity = '0.5';
+              }}
+            />
           </motion.div>
         ))}
       </AnimatePresence>
