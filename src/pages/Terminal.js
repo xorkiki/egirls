@@ -894,6 +894,37 @@ const Terminal = ({ onClose }) => {
     }
   }, [isMobile]);
 
+  // Auto-type and execute command for mobile
+  const autoTypeAndExecute = async (command, speed = 50) => {
+    setIsTyping(true);
+    let currentOutput = [...output];
+    
+    // Add prompt
+    const isSmallScreen = window.innerWidth <= 412;
+    const promptText = isSmallScreen 
+      ? 'egirls@egirls.faith ~ % '
+      : 'egirls@egirls.faith-MacBook-Pro ~ % ';
+    
+    currentOutput.push({ type: 'system', content: promptText });
+    setOutput([...currentOutput]);
+    
+    // Type the command
+    let typedCommand = '';
+    for (let i = 0; i < command.length; i++) {
+      typedCommand += command[i];
+      currentOutput.push({ type: 'input', content: typedCommand, showCursor: true });
+      setOutput([...currentOutput]);
+      await new Promise(resolve => setTimeout(resolve, speed));
+    }
+    
+    // Remove cursor from command
+    currentOutput[currentOutput.length - 1] = { type: 'input', content: typedCommand, showCursor: false };
+    setOutput([...currentOutput]);
+    
+    // Execute the command
+    await handleCommand(command);
+  };
+
   // Auto-start typing sequence for mobile devices
   useEffect(() => {
     if (isMobile && !hasAutoStarted && currentPage === 'terminal') {
@@ -917,7 +948,7 @@ const Terminal = ({ onClose }) => {
       
       startAutoTyping();
     }
-  }, [isMobile, hasAutoStarted, currentPage, autoTypeAndExecute]);
+  }, [isMobile, hasAutoStarted, currentPage]);
 
   useEffect(() => {
     // Measure prompt width for cursor positioning
@@ -1028,36 +1059,6 @@ const Terminal = ({ onClose }) => {
     setIsTyping(false);
   };
 
-  // Auto-type and execute command for mobile
-  const autoTypeAndExecute = async (command, speed = 50) => {
-    setIsTyping(true);
-    let currentOutput = [...output];
-    
-    // Add prompt
-    const isSmallScreen = window.innerWidth <= 412;
-    const promptText = isSmallScreen 
-      ? 'egirls@egirls.faith ~ % '
-      : 'egirls@egirls.faith-MacBook-Pro ~ % ';
-    
-    currentOutput.push({ type: 'system', content: promptText });
-    setOutput([...currentOutput]);
-    
-    // Type the command
-    let typedCommand = '';
-    for (let i = 0; i < command.length; i++) {
-      typedCommand += command[i];
-      currentOutput.push({ type: 'input', content: typedCommand, showCursor: true });
-      setOutput([...currentOutput]);
-      await new Promise(resolve => setTimeout(resolve, speed));
-    }
-    
-    // Remove cursor from command
-    currentOutput[currentOutput.length - 1] = { type: 'input', content: typedCommand, showCursor: false };
-    setOutput([...currentOutput]);
-    
-    // Execute the command
-    await handleCommand(command);
-  };
 
   const handleCommand = async (command) => {
     const trimmedCommand = command.trim();
