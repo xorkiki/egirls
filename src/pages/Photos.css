@@ -77,7 +77,7 @@
   position: fixed;
   left: 0;
   right: 0;
-  top: 44px; /* Position below header */
+  top: 40px; /* Position below header */
   bottom: 80px; /* Position above footer - more reliable than height calculation */
   width: 100vw; /* Force full viewport width */
   min-width: 100vw; /* Ensure minimum width */
