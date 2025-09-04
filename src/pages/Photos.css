@@ -74,12 +74,17 @@
   font-weight: bold !important;
   margin: 0 !important;
   padding: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
   position: static !important;
   right: auto !important;
   top: auto !important;
   transform: none !important;
   flex: 1 !important;
   text-align: center !important;
+  box-sizing: border-box !important;
 }
 
 .photos-content {
