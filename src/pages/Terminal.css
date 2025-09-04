@@ -754,6 +754,19 @@ html, body {
     padding: 0 !important;
     margin: 0 !important;
   }
+  
+  /* Center the entire container stack */
+  .digital-collage-container {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  .collage-content {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
 }
 
 
