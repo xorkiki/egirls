@@ -64,10 +64,7 @@ const CardStack = ({ photos, onSwipeComplete }) => {
       ref={constraintsRef}
       className="card-stack-container"
       style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
+        position: 'relative',
         width: '100%',
         height: '100%',
         display: 'flex',
@@ -131,8 +128,7 @@ const CardStack = ({ photos, onSwipeComplete }) => {
                 height: '100%',
                 borderRadius: '12px',
                 overflow: 'hidden',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-                backgroundColor: '#1a1a1a'
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
               }}
             >
               <img
