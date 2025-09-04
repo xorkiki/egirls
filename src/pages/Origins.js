@@ -20,7 +20,7 @@ const Origins = ({ onClose }) => {
 
   return (
     <div className="origins-page">
-      <div className="origins-header">
+      <div className="about-header">
         <div className="terminal-buttons">
           <div className="terminal-button close" onClick={onClose}>
             <span className="close-icon">×</span>

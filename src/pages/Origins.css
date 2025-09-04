@@ -60,22 +60,23 @@
   background-color: #27ca3f;
 }
 
-.origins-header {
+.about-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0;
+  justify-content: flex-start;
+  gap: 20px;
+  padding: 8px 14px;
   background-color: #1a1a1a;
   position: relative;
   min-height: 40px;
 }
 
-.origins-header .terminal-buttons {
+.about-header .terminal-buttons {
   display: flex;
   gap: 9px;
 }
 
-.origins-header .terminal-button {
+.about-header .terminal-button {
   width: 14px;
   height: 14px;
   border-radius: 50%;
@@ -84,27 +85,40 @@
   transition: all 0.2s ease;
 }
 
-.origins-header .terminal-button.close {
+.about-header .terminal-button.close {
   background-color: #ff5f56;
 }
 
-.origins-header .terminal-button.close:hover {
+.about-header .terminal-button.close:hover {
   background-color: #ff4444;
 }
 
-.origins-header .terminal-button.close:hover .close-icon {
+.about-header .terminal-button.close:hover .close-icon {
   opacity: 1;
 }
 
-.origins-header .terminal-button.minimize {
+.close-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #000;
+  font-size: 15px;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  line-height: 1;
+}
+
+.about-header .terminal-button.minimize {
   background-color: #ffbd2e;
 }
 
-.origins-header .terminal-button.maximize {
+.about-header .terminal-button.maximize {
   background-color: #27ca3f;
 }
 
-.origins-header .terminal-title {
+.about-header .terminal-title {
   font-size: 13px;
   color: #fff;
   font-weight: bold;
@@ -184,10 +198,6 @@
 
 /* Mobile Responsive Styles - exactly matching Terminal page */
 @media (max-width: 768px) {
-  .origins-header {
-    padding: 0;
-    min-height: 40px;
-  }
   
   .origins-content {
     padding: 20px;
