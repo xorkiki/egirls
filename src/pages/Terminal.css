@@ -755,17 +755,21 @@ html, body {
     margin: 0 !important;
   }
   
-  /* Center the entire container stack */
+  /* Center the entire container stack and fix width */
   .digital-collage-container {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    width: 350px !important;
+    max-width: 350px !important;
   }
   
   .collage-content {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    width: 350px !important;
+    max-width: 350px !important;
   }
 }
 
