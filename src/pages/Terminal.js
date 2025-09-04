@@ -940,10 +940,6 @@ const Terminal = ({ onClose }) => {
         
         // Auto-type and execute 'help' command
         await autoTypeAndExecute('help');
-        await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds
-        
-        // Auto-type and execute 'cat manifesto.txt' command
-        await autoTypeAndExecute('cat manifesto.txt');
       };
       
       startAutoTyping();
