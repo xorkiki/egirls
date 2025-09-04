@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import About from './About';
+import Origins from './Origins';
 import Photos from './Photos';
 import WineNight from './WineNight';
 import Tattoos from './Tattoos';
@@ -861,7 +862,7 @@ const Terminal = ({ onClose }) => {
   const promptRef = useRef(null);
 
   const commands = {
-    'help': 'Available commands:\n• cd about/ - Navigate to about page\n• cd photos/ - Navigate to photos page\n• cd identity/ - Navigate to identity page\n• cd frequencies/ - Toggle music player (desktop only)\n• cat manifesto.txt - Display manifesto in terminal\n• help - Show this help\n• clear - Clear terminal\n• exit - Return to landing page',
+    'help': 'Available commands:\n• cd about/ - Navigate to about page\n• cd origins/ - Navigate to origins page\n• cd photos/ - Navigate to photos page\n• cd identity/ - Navigate to identity page\n• cd frequencies/ - Toggle music player (desktop only)\n• cat manifesto.txt - Display manifesto in terminal\n• help - Show this help\n• clear - Clear terminal\n• exit - Return to landing page',
     'about': 'Egirls is a digital art collective exploring the intersection of technology, identity, and expression. We create immersive experiences that challenge conventional web design paradigms.',
     'clear': 'clear',
     'exit': 'exit'
@@ -923,6 +924,7 @@ const Terminal = ({ onClose }) => {
 
   const commandDirectory = [
     'cd about/',
+    'cd origins/',
     'cd photos/',
     'cd identity/',
     'cd frequencies/',
@@ -942,6 +944,7 @@ const Terminal = ({ onClose }) => {
             onClose(); // Return to landing page
             break;
           case 'about':
+          case 'origins':
           case 'photos':
           case 'identity':
           case 'transmissions':
@@ -1117,6 +1120,8 @@ const Terminal = ({ onClose }) => {
 
     if (trimmedCommand === 'cd about/') {
       setCurrentPage('about');
+    } else if (trimmedCommand === 'cd origins/') {
+      setCurrentPage('origins');
     } else if (trimmedCommand === 'cd photos/') {
       setCurrentPage('photos');
       } else if (trimmedCommand === 'cd identity/') {
@@ -1196,6 +1201,10 @@ const Terminal = ({ onClose }) => {
 
   if (currentPage === 'about') {
     return <About onClose={() => setCurrentPage('terminal')} />;
+  }
+
+  if (currentPage === 'origins') {
+    return <Origins onClose={() => setCurrentPage('terminal')} />;
   }
 
   if (currentPage === 'photos') {
