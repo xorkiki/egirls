@@ -95,6 +95,7 @@ html, body {
   right: 15px;
   top: 50%;
   transform: translateY(-50%);
+  text-align: right;
   -webkit-app-region: no-drag;
   overflow: hidden;
   text-overflow: ellipsis;
