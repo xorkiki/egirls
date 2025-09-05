@@ -50,8 +50,8 @@ const Tattoos = ({ onClose }) => {
           </div>
         </div>
 
-        {/* Regular Videos Grid */}
-        <div className="videos-grid">
+        {/* Regular Videos - Side by Side */}
+        <div className="videos-row">
           <video 
             className="tattoos-video"
             controls
