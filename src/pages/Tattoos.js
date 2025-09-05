@@ -31,7 +31,17 @@ const Tattoos = ({ onClose }) => {
         <div className="terminal-title">tattoos</div>
       </div>
       <div className="tattoos-content">
-        <p>Tattoos page coming soon...</p>
+        <video 
+          className="tattoos-video"
+          controls
+          autoPlay
+          muted
+          loop
+          playsInline
+        >
+          <source src="/photos/tattoos/egirls-v1.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
       </div>
       <div className="tattoos-footer">
         <div className="tattoos-logo">
