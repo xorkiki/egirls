@@ -31,37 +31,58 @@ const Tattoos = ({ onClose }) => {
         <div className="terminal-title">tattoos</div>
       </div>
       <div className="tattoos-content">
-        <video 
-          className="tattoos-video"
-          controls
-          autoPlay
-          muted
-          loop
-          playsInline
-        >
-          <source src="/photos/tattoos/egirls-v2.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        <video 
-          className="tattoos-video"
-          controls
-          muted
-          loop
-          playsInline
-        >
-          <source src="/photos/tattoos/egirls-v3.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        <video 
-          className="tattoos-video"
-          controls
-          muted
-          loop
-          playsInline
-        >
-          <source src="/photos/tattoos/egirls-v4.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+        {/* Featured Video - Special Layout */}
+        <div className="featured-video-container">
+          <video 
+            className="featured-video"
+            controls
+            autoPlay
+            muted
+            loop
+            playsInline
+          >
+            <source src="/photos/tattoos/EGIRL V3.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <div className="video-overlay">
+            <h3>EGIRL V3</h3>
+            <p>Featured Collection</p>
+          </div>
+        </div>
+
+        {/* Regular Videos Grid */}
+        <div className="videos-grid">
+          <video 
+            className="tattoos-video"
+            controls
+            muted
+            loop
+            playsInline
+          >
+            <source src="/photos/tattoos/egirls-v2.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <video 
+            className="tattoos-video"
+            controls
+            muted
+            loop
+            playsInline
+          >
+            <source src="/photos/tattoos/egirls-v3.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <video 
+            className="tattoos-video"
+            controls
+            muted
+            loop
+            playsInline
+          >
+            <source src="/photos/tattoos/egirls-v4.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
       </div>
       <div className="tattoos-footer">
         <div className="tattoos-logo">
