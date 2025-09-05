@@ -31,27 +31,19 @@ const Tattoos = ({ onClose }) => {
         <div className="terminal-title">tattoos</div>
       </div>
       <div className="tattoos-content">
-        {/* Featured Video - Special Layout */}
-        <div className="featured-video-container">
+        {/* Videos - Grid Layout */}
+        <div className="videos-grid">
           <video 
-            className="featured-video"
+            className="tattoos-video"
             controls
             autoPlay
             muted
             loop
             playsInline
           >
-            <source src="/photos/tattoos/EGIRL V3.mp4" type="video/mp4" />
+            <source src="/photos/tattoos/egirls-v4.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          <div className="video-overlay">
-            <h3>EGIRL V3</h3>
-            <p>Featured Collection</p>
-          </div>
-        </div>
-
-        {/* Regular Videos - Grid Layout */}
-        <div className="videos-grid">
           <video 
             className="tattoos-video"
             controls
@@ -59,7 +51,7 @@ const Tattoos = ({ onClose }) => {
             loop
             playsInline
           >
-            <source src="/photos/tattoos/egirls-v4.mp4" type="video/mp4" />
+            <source src="/photos/tattoos/EGIRL V3.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
           <video 
