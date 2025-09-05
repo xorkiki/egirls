@@ -59,26 +59,6 @@ const Tattoos = ({ onClose }) => {
             loop
             playsInline
           >
-            <source src="/photos/tattoos/egirls-v2.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-          <video 
-            className="tattoos-video"
-            controls
-            muted
-            loop
-            playsInline
-          >
-            <source src="/photos/tattoos/egirls-v3.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-          <video 
-            className="tattoos-video"
-            controls
-            muted
-            loop
-            playsInline
-          >
             <source src="/photos/tattoos/egirls-v4.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
