@@ -50,8 +50,8 @@ const Tattoos = ({ onClose }) => {
           </div>
         </div>
 
-        {/* Regular Videos - Side by Side */}
-        <div className="videos-row">
+        {/* Regular Videos - Grid Layout */}
+        <div className="videos-grid">
           <video 
             className="tattoos-video"
             controls
@@ -80,6 +80,36 @@ const Tattoos = ({ onClose }) => {
             playsInline
           >
             <source src="/photos/tattoos/egirls-v4.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <video 
+            className="tattoos-video"
+            controls
+            muted
+            loop
+            playsInline
+          >
+            <source src="/photos/tattoos/EGIRL V1.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <video 
+            className="tattoos-video"
+            controls
+            muted
+            loop
+            playsInline
+          >
+            <source src="/photos/tattoos/EGIRL V4.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <video 
+            className="tattoos-video"
+            controls
+            muted
+            loop
+            playsInline
+          >
+            <source src="/photos/tattoos/EGIRLS V2.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>

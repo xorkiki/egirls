@@ -138,20 +138,18 @@
   letter-spacing: 1px;
 }
 
-/* Videos Row */
-.videos-row {
-  display: flex;
-  gap: 20px;
-  max-width: 1200px;
+/* Videos Grid */
+.videos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 25px;
+  max-width: 1400px;
   margin: 0 auto;
-  justify-content: center;
-  flex-wrap: wrap;
+  padding: 0 20px;
 }
 
 .tattoos-video {
-  flex: 1;
-  min-width: 300px;
-  max-width: 400px;
+  width: 100%;
   height: auto;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
@@ -259,15 +257,13 @@
     font-size: 12px;
   }
   
-  .videos-row {
-    flex-direction: column;
+  .videos-grid {
+    grid-template-columns: 1fr;
     gap: 20px;
     padding: 0 10px;
   }
   
   .tattoos-video {
-    min-width: unset;
-    max-width: 100%;
     border-radius: 8px;
   }
 }
