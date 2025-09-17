@@ -65,7 +65,7 @@ const Tattoos = ({ onClose }) => {
               onLoadStart={() => handleVideoLoadStart('egirls-v4')}
               onCanPlay={() => handleVideoCanPlay('egirls-v4')}
             >
-              <source src="/photos/tattoos/egirls-v4.mp4" type="video/mp4" />
+              <source src="/photos/tattoos/compressed/egirls-v4.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
@@ -82,7 +82,7 @@ const Tattoos = ({ onClose }) => {
               onLoadStart={() => handleVideoLoadStart('EGIRL V3')}
               onCanPlay={() => handleVideoCanPlay('EGIRL V3')}
             >
-              <source src="/photos/tattoos/EGIRL V3.mp4" type="video/mp4" />
+              <source src="/photos/tattoos/compressed/EGIRL V3.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
@@ -99,7 +99,7 @@ const Tattoos = ({ onClose }) => {
               onLoadStart={() => handleVideoLoadStart('EGIRL V1')}
               onCanPlay={() => handleVideoCanPlay('EGIRL V1')}
             >
-              <source src="/photos/tattoos/EGIRL V1.mp4" type="video/mp4" />
+              <source src="/photos/tattoos/compressed/EGIRL V1.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
@@ -116,7 +116,7 @@ const Tattoos = ({ onClose }) => {
               onLoadStart={() => handleVideoLoadStart('EGIRL V4')}
               onCanPlay={() => handleVideoCanPlay('EGIRL V4')}
             >
-              <source src="/photos/tattoos/EGIRL V4.mp4" type="video/mp4" />
+              <source src="/photos/tattoos/compressed/EGIRL V4.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
@@ -133,7 +133,7 @@ const Tattoos = ({ onClose }) => {
               onLoadStart={() => handleVideoLoadStart('EGIRLS V2')}
               onCanPlay={() => handleVideoCanPlay('EGIRLS V2')}
             >
-              <source src="/photos/tattoos/EGIRLS V2.mp4" type="video/mp4" />
+              <source src="/photos/tattoos/compressed/EGIRLS V2.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
