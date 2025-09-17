@@ -742,7 +742,7 @@ const Terminal = ({ onClose }) => {
   const promptRef = useRef(null);
 
   const commands = {
-    'help': 'available commands:\n• cd about/ - navigate to about page\n• cd origins/ - navigate to origins page\n• cd photos/ - navigate to photos page\n• cd identity/ - navigate to identity page\n• cd frequencies/ - toggle music player (desktop only)\n• manifesto.txt - display manifesto in terminal\n• help - show this help\n• clear - clear terminal\n• exit - return to landing page',
+    'help': 'available commands:\n• cd about/ - navigate to about page\n• cd origins/ - navigate to origins page\n• cd photos/ - navigate to photos page\n• cd frequencies/ - toggle music player (desktop only)\n• manifesto.txt - display manifesto in terminal\n• help - show this help\n• clear - clear terminal\n• exit - return to landing page',
     'about': 'Egirls is a digital art collective exploring the intersection of technology, identity, and expression. We create immersive experiences that challenge conventional web design paradigms.',
     'clear': 'clear',
     'exit': 'exit'
@@ -806,7 +806,7 @@ const Terminal = ({ onClose }) => {
     'cd about/',
     'cd origins/',
     'cd photos/',
-    'cd identity/',
+    // 'cd identity/', // HIDDEN - can be restored later
     'cd frequencies/',
     'manifesto.txt'
   ];
@@ -826,7 +826,8 @@ const Terminal = ({ onClose }) => {
           case 'about':
           case 'origins':
           case 'photos':
-          case 'identity':
+          // case 'identity': // HIDDEN - can be restored later
+          //   break;
           case 'transmissions':
           case 'manifesto':
             setCurrentPage('terminal'); // Return to terminal page
@@ -1071,8 +1072,8 @@ const Terminal = ({ onClose }) => {
       setCurrentPage('origins');
     } else if (trimmedCommand === 'cd photos/') {
       setCurrentPage('photos');
-      } else if (trimmedCommand === 'cd identity/') {
-    setCurrentPage('identity');
+      // } else if (trimmedCommand === 'cd identity/') { // HIDDEN - can be restored later
+      //   setCurrentPage('identity');
   } else if (trimmedCommand === 'cd transmissions/') {
     setCurrentPage('transmissions');
   } else if (trimmedCommand === 'cd frequencies/') {
@@ -1086,7 +1087,7 @@ const Terminal = ({ onClose }) => {
       setShowMusicPlayer(false);
       await typeOutText(manifestos.join('\n'));
     } else if (trimmedCommand === 'ls') {
-      await typeOutText('about/\norigins/\nphotos/\nidentity/\ntransmissions/\nfrequencies/\nmanifesto.txt');
+      await typeOutText('about/\norigins/\nphotos/\ntransmissions/\nfrequencies/\nmanifesto.txt');
     } else if (trimmedCommand === 'help') {
       setCurrentPage('help');
       await typeOutText(commands.help);
@@ -1174,32 +1175,33 @@ const Terminal = ({ onClose }) => {
     return <Tattoos onClose={() => setCurrentPage('photos')} />;
   }
 
-  if (currentPage === 'identity') {
-    return (
-      <div className="identity-page">
-        <div className="identity-header">
-          <div className="terminal-buttons">
-            <div className="terminal-button close" onClick={() => setCurrentPage('terminal')}>
-              <span className="close-icon">×</span>
-            </div>
-            <div className="terminal-button minimize"></div>
-            <div className="terminal-button maximize"></div>
-          </div>
-          <div className="terminal-title">identity</div>
-        </div>
-        <div className="identity-content">
-          <div className="identity-collage-wrapper">
-            <DigitalCollage />
-          </div>
-        </div>
-        <div className="identity-footer">
-          <div className="identity-logo">
-            <img src="/egirl_logo.svg" alt="egirls logo" />
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // HIDDEN - Identity page can be restored later
+  // if (currentPage === 'identity') {
+  //   return (
+  //     <div className="identity-page">
+  //       <div className="identity-header">
+  //         <div className="terminal-buttons">
+  //           <div className="terminal-button close" onClick={() => setCurrentPage('terminal')}>
+  //             <span className="close-icon">×</span>
+  //           </div>
+  //           <div className="terminal-button minimize"></div>
+  //           <div className="terminal-button maximize"></div>
+  //         </div>
+  //         <div className="terminal-title">identity</div>
+  //       </div>
+  //       <div className="identity-content">
+  //         <div className="identity-collage-wrapper">
+  //           <DigitalCollage />
+  //         </div>
+  //       </div>
+  //       <div className="identity-footer">
+  //         <div className="identity-logo">
+  //           <img src="/egirl_logo.svg" alt="egirls logo" />
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   if (currentPage === 'transmissions') {
     return (
